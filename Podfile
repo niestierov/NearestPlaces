@@ -7,6 +7,7 @@ target 'NearestPlaces' do
 
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'Alamofire'
 
 end
 
