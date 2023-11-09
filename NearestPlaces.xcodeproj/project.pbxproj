@@ -10,6 +10,7 @@
 		1628A5F0EF258FB47B6F7924 /* Pods_NearestPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA3C5FC8DB27D5F0CBBA5E2 /* Pods_NearestPlaces.framework */; };
 		9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */; };
 		9A2D56AB2AFCDD9B002A2A37 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56AA2AFCDD9B002A2A37 /* Router.swift */; };
+		9A2D56B22AFCE5C1002A2A37 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B12AFCE5C1002A2A37 /* Constants.swift */; };
 		9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD52AF9114400B24002 /* AppDelegate.swift */; };
 		9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD72AF9114400B24002 /* SceneDelegate.swift */; };
 		9AE39FDF2AF9114600B24002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AE39FDE2AF9114600B24002 /* Assets.xcassets */; };
@@ -22,6 +23,8 @@
 		887C3A931A266400E5924FF0 /* Pods-NearestPlaces.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearestPlaces.release.xcconfig"; path = "Target Support Files/Pods-NearestPlaces/Pods-NearestPlaces.release.xcconfig"; sourceTree = "<group>"; };
 		9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlacesViewController.swift; sourceTree = "<group>"; };
 		9A2D56AA2AFCDD9B002A2A37 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		9A2D56AF2AFCE445002A2A37 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		9A2D56B12AFCE5C1002A2A37 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9AE39FD22AF9114400B24002 /* NearestPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearestPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE39FD52AF9114400B24002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9AE39FD72AF9114400B24002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +92,7 @@
 			children = (
 				9AE39FDE2AF9114600B24002 /* Assets.xcassets */,
 				9AE39FE02AF9114600B24002 /* LaunchScreen.storyboard */,
+				9A2D56B12AFCE5C1002A2A37 /* Constants.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -125,9 +129,17 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		9A2D56B02AFCE5AA002A2A37 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		9AE39FC92AF9114400B24002 = {
 			isa = PBXGroup;
 			children = (
+				9A2D56AF2AFCE445002A2A37 /* Secrets.xcconfig */,
 				9AE39FD42AF9114400B24002 /* NearestPlaces */,
 				9AE39FD32AF9114400B24002 /* Products */,
 				31F165D7395E838059152B98 /* Pods */,
@@ -149,6 +161,7 @@
 				9A2D56A02AFCDCEE002A2A37 /* App&SceneDelegate */,
 				9A2D56A12AFCDCF5002A2A37 /* Scenes */,
 				9A2D56A22AFCDCF9002A2A37 /* Routing */,
+				9A2D56B02AFCE5AA002A2A37 /* Extensions */,
 				9A2D56A32AFCDCFE002A2A37 /* Supporting */,
 				9AE39FE32AF9114600B24002 /* Info.plist */,
 			);
@@ -269,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A2D56B22AFCE5C1002A2A37 /* Constants.swift in Sources */,
 				9A2D56AB2AFCDD9B002A2A37 /* Router.swift in Sources */,
 				9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */,
 				9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */,
@@ -292,6 +306,7 @@
 /* Begin XCBuildConfiguration section */
 		9AE39FE42AF9114600B24002 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A2D56AF2AFCE445002A2A37 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -352,6 +367,7 @@
 		};
 		9AE39FE52AF9114600B24002 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A2D56AF2AFCE445002A2A37 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -416,6 +432,7 @@
 				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearestPlaces/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app requires access to your device's location when in use to provide you with accurate and personalized location-based services, such as navigation and nearby recommendations.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -446,6 +463,7 @@
 				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearestPlaces/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app requires access to your device's location when in use to provide you with accurate and personalized location-based services, such as navigation and nearby recommendations.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
