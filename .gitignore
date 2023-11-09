@@ -61,3 +61,7 @@ Podfile.lock
 *.xcbkptlist
 xcuserdata/
 xcuserdata
+
+# Config files
+#*.xcconfig
+Secrets.xcconfig
