@@ -26,7 +26,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         
         let navigationController = UINavigationController()
-        let router = Router(navigationController: navigationController)
+        let networkService = NetworkService()
+        let router = Router(
+            navigationController: navigationController,
+            networkService: networkService
+        )
         
         router.showMapPlacesModule()
         

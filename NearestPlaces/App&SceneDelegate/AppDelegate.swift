@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: Constants.apiKeyGoogle) as? String else {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: AppConstant.apiKeyGoogle) as? String else {
             return true
         }
         

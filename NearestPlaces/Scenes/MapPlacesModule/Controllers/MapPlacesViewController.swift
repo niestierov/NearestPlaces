@@ -9,27 +9,44 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-class MapPlacesViewController: UIViewController {
-
+final class MapPlacesViewController: UIViewController {
+    
+    private struct Constant {
+        static let distanceFilter: CLLocationDistance = 20
+        static let defaultZoom: Float = 14.0
+    }
+    
     // MARK: - Properties -
-    private var locationManager = CLLocationManager()
-    private var placesClient = GMSPlacesClient.shared()
+    private let locationManager = CLLocationManager()
+    private let placesClient = GMSPlacesClient.shared()
+    private let networkService: NetworkService
+    private var places: [PlaceInfo]?
     
     // MARK: - UIComponents -
     private var mapView: GMSMapView = {
-        let view = GMSMapView()
-        view.settings.myLocationButton = true
-        view.isMyLocationEnabled = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+        let map = GMSMapView()
+        map.settings.myLocationButton = true
+        map.isMyLocationEnabled = true
+        map.translatesAutoresizingMaskIntoConstraints = false
+        return map
     }()
     
     // MARK: - LifeCycle -
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupMapView()
         setupLocationManager()
+    }
+    
+    init(networkService: NetworkService) {
+        self.networkService = networkService
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -49,11 +66,10 @@ private extension MapPlacesViewController {
     func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        
-        let distanceFilter: CLLocationDistance = 20
-        locationManager.distanceFilter = distanceFilter
+        locationManager.distanceFilter = Constant.distanceFilter
         
         locationManager.requestWhenInUseAuthorization()
+        isUserAuthorized()
     }
     
     func isUserAuthorized() {
@@ -61,7 +77,7 @@ private extension MapPlacesViewController {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case.restricted, .denied:
-            print("Denied.")
+            handleAuthorizationStatusDenied()
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
         @unknown default:
@@ -69,21 +85,97 @@ private extension MapPlacesViewController {
         }
     }
     
-    func updateMapPosition(location: CLLocationCoordinate2D, zoom: Float = 15.0) {
+    func updateUserLocation(
+        location: CLLocationCoordinate2D,
+        zoom: Float = Constant.defaultZoom
+    ) {
         let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
         mapView.camera = camera
-        showMarker(location: location)
-        showMarker(location: location)
-        showMarker(location: location)
+        
+        requestPlacesWithLocation(location)
     }
     
-    func showMarker(location: CLLocationCoordinate2D){
-        let marker = GMSMarker()
-        marker.position = location
+    func showMarker(for place: PlaceInfo) {
+        let latitude = place.geometry.location.latitude
+        let longitude = place.geometry.location.longitude
         
-        marker.title = "Test"
-        marker.snippet = "Test2"
+        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let marker = GMSMarker(position: location)
+        
+        marker.title = place.name
+        marker.snippet = place.vicinity
         marker.map = mapView
+    }
+    
+    func handleAuthorizationStatusDenied() {
+        let action = {
+            if let appSettingsURL = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettingsURL) {
+                UIApplication.shared.open(appSettingsURL, options: [:])
+            }
+        }
+        
+        let cancelAction: AlertButtonAction = ("Cancel", nil)
+        let settingsAction: AlertButtonAction = ("Okay", action)
+        
+        showAlert(
+            title: AppConstant.LocationAuthorizationStatus.Denied.title,
+            message: AppConstant.LocationAuthorizationStatus.Denied.message,
+            actions: [cancelAction, settingsAction]
+        )
+    }
+    
+    func handleSuccessRequest(data: Place?) {
+        guard let results = data?.results else {
+            return
+        }
+        
+        fetchPlacesResult(with: results)
+        
+        if let nextPageToken = data?.nextPageToken {
+            let endpoint = Endpoint.nextPage(token: nextPageToken)
+            
+            loadPlaces(endpoint: endpoint)
+        }
+    }
+    
+    func fetchPlacesResult(with places: [PlaceInfo]?) {
+        DispatchQueue.main.async {
+            self.places = places?.compactMap {
+                PlaceInfo.fromPlaceInfo($0, type: PlaceInfo.self)
+            }
+            
+            guard let safePlaces = self.places else {
+                return
+            }
+                
+            for place in safePlaces {
+                self.showMarker(for: place)
+            }
+        }
+        
+    }
+    
+    func requestPlacesWithLocation(_ location: CLLocationCoordinate2D) {
+        let endpoint = Endpoint.places(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+        
+        loadPlaces(endpoint: endpoint)
+    }
+    
+    func loadPlaces(endpoint: Endpoint) {
+        networkService.request(
+            endpoint: endpoint,
+            type: Place.self
+        ) { [unowned self] response in
+            switch response {
+            case .success(let data):
+                self.handleSuccessRequest(data: data)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 
@@ -98,6 +190,6 @@ extension MapPlacesViewController: CLLocationManagerDelegate {
             return
         }
         
-        updateMapPosition(location: location)
+        updateUserLocation(location: location)
     }
 }

@@ -15,14 +15,20 @@ final class Router {
     
     // MARK: - Properties -
     private var navigationController: UINavigationController?
+    private var networkService: NetworkService
     
-    init(navigationController: UINavigationController) {
+    // MARK: - LifeCycle -
+    init(
+        navigationController: UINavigationController,
+        networkService: NetworkService
+    ) {
         self.navigationController = navigationController
+        self.networkService = networkService
     }
     
     // MARK: - Iternal -
     func showMapPlacesModule() {
-        let mapPlacesModule = MapPlacesViewController()
+        let mapPlacesModule = MapPlacesViewController(networkService: networkService)
         navigationController?.setViewControllers([mapPlacesModule], animated: true)
     }
 }

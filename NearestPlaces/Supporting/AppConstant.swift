@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Constant {
+struct AppConstant {
     
     static let apiKeyGoogle = "API_KEY_GOOGLE"
     
