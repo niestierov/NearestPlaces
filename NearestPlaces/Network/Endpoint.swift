@@ -12,6 +12,7 @@ private struct EndpointConstant {
     static let urlScheme = "https"
     static let urlHost = "maps.googleapis.com"
     static let urlPath = "/maps/api/place/nearbysearch/json"
+    
     static let urlStringError = "Error constructing URL."
 }
 
@@ -95,6 +96,7 @@ enum Endpoint {
         guard let urlString = urlBuilder.string else {
             return EndpointConstant.urlStringError
         }
+        debugPrint(urlString)
         return urlString
     }
 }

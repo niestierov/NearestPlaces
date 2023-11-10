@@ -23,14 +23,14 @@ final class NetworkService: NetworkServiceProtocol {
         type: T.Type,
         completion: @escaping (Result<T?, Error>) -> Void
     ) {
-        
         guard let url = URL(string: endpoint.fullURLString()) else {
             return
         }
         
         AF.request(
             url,
-            method: .get
+            method: endpoint.method,
+            encoding: endpoint.encoding
         ).responseDecodable(of: type) { response in
             guard response.data != nil else {
                 completion(.failure(RequestError.invalidData))

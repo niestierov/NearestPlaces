@@ -11,16 +11,30 @@ import GooglePlaces
 
 final class MapPlacesViewController: UIViewController {
     
-    private struct Constant {
-        static let distanceFilter: CLLocationDistance = 20
+    private enum Constant {
+        static let navigationControllerTitle = "Map"
+        static let requestPlacesManuallyImage = "arrow.clockwise.circle"
+        static let distanceFilter: CLLocationDistance = 50
         static let defaultZoom: Float = 14.0
+        static let nextPageDelay: DispatchTime = .now() + 2
+        
+        enum Alert {
+            static let actionTitleCancel = "Cancel"
+            static let actionTitleSettings = "Open Settings"
+            static let actionTitleRequestError = "Try Again"
+            static let titleAuthorizationDenied = "Location Services Disabled"
+            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
+            static let titleRequestError = "There is an Error"
+        }
     }
     
     // MARK: - Properties -
     private let locationManager = CLLocationManager()
     private let placesClient = GMSPlacesClient.shared()
     private let networkService: NetworkService
-    private var places: [PlaceInfo]?
+    private var placesList: [PlaceInfo] = []
+    private var markersList = Set<String>()
+    private var nextPageToken: String?
     
     // MARK: - UIComponents -
     private var mapView: GMSMapView = {
@@ -30,6 +44,7 @@ final class MapPlacesViewController: UIViewController {
         map.translatesAutoresizingMaskIntoConstraints = false
         return map
     }()
+
     
     // MARK: - LifeCycle -
     override func viewDidLoad() {
@@ -56,7 +71,7 @@ private extension MapPlacesViewController {
         view.addSubview(mapView)
         
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -95,18 +110,6 @@ private extension MapPlacesViewController {
         requestPlacesWithLocation(location)
     }
     
-    func showMarker(for place: PlaceInfo) {
-        let latitude = place.geometry.location.latitude
-        let longitude = place.geometry.location.longitude
-        
-        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let marker = GMSMarker(position: location)
-        
-        marker.title = place.name
-        marker.snippet = place.vicinity
-        marker.map = mapView
-    }
-    
     func handleAuthorizationStatusDenied() {
         let action = {
             if let appSettingsURL = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettingsURL) {
@@ -114,45 +117,14 @@ private extension MapPlacesViewController {
             }
         }
         
-        let cancelAction: AlertButtonAction = ("Cancel", nil)
-        let settingsAction: AlertButtonAction = ("Okay", action)
+        let cancelAction: AlertButtonAction = (Constant.Alert.actionTitleCancel, nil)
+        let settingsAction: AlertButtonAction = (Constant.Alert.actionTitleSettings, action)
         
         showAlert(
-            title: AppConstant.LocationAuthorizationStatus.Denied.title,
-            message: AppConstant.LocationAuthorizationStatus.Denied.message,
+            title: Constant.Alert.titleAuthorizationDenied,
+            message: Constant.Alert.messageAuthorizationDenied,
             actions: [cancelAction, settingsAction]
         )
-    }
-    
-    func handleSuccessRequest(data: Place?) {
-        guard let results = data?.results else {
-            return
-        }
-        
-        fetchPlacesResult(with: results)
-        
-        if let nextPageToken = data?.nextPageToken {
-            let endpoint = Endpoint.nextPage(token: nextPageToken)
-            
-            loadPlaces(endpoint: endpoint)
-        }
-    }
-    
-    func fetchPlacesResult(with places: [PlaceInfo]?) {
-        DispatchQueue.main.async {
-            self.places = places?.compactMap {
-                PlaceInfo.fromPlaceInfo($0, type: PlaceInfo.self)
-            }
-            
-            guard let safePlaces = self.places else {
-                return
-            }
-                
-            for place in safePlaces {
-                self.showMarker(for: place)
-            }
-        }
-        
     }
     
     func requestPlacesWithLocation(_ location: CLLocationCoordinate2D) {
@@ -168,14 +140,82 @@ private extension MapPlacesViewController {
         networkService.request(
             endpoint: endpoint,
             type: Place.self
-        ) { [unowned self] response in
+        ) { [weak self] response in
+            guard let self else {
+                return
+            }
+            
             switch response {
             case .success(let data):
                 self.handleSuccessRequest(data: data)
             case .failure(let error):
-                print(error)
+                self.handleFailureRequest(error: error)
             }
         }
+    }
+    
+    func showPlaceMarkers(for place: [PlaceInfo]) {
+        DispatchQueue.main.async {
+            for place in self.placesList {
+                if !self.markersList.contains(place.name) {
+                    self.addPlaceMarker(for: place)
+                }
+            }
+        }
+    }
+    
+    func addPlaceMarker(for place: PlaceInfo) {
+        let latitude = place.geometry.location.latitude
+        let longitude = place.geometry.location.longitude
+        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let marker = GMSMarker(position: location)
+        marker.title = place.name
+        marker.snippet = place.vicinity
+        marker.map = mapView
+        
+        markersList.insert(place.name)
+    }
+    
+    func requestNextPage() {
+        guard let token = nextPageToken else {
+            return
+        }
+        
+        let endpoint = Endpoint.nextPage(token: token)
+        
+        //: The next request is valid after a few sec delay
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: Constant.nextPageDelay) {
+            self.loadPlaces(endpoint: endpoint)
+        }
+    }
+    
+    func handleSuccessRequest(data: Place?) {
+        guard let safeData = data,
+              let dataResults = safeData.results else {
+            return
+        }
+        
+        placesList.append(contentsOf: dataResults)
+        
+        showPlaceMarkers(for: placesList)
+        
+        nextPageToken = safeData.nextPageToken
+        requestNextPage()
+    }
+    
+    func handleFailureRequest(error: Error) {
+        let action = {
+            self.locationManager.startUpdatingLocation()
+        }
+        
+        let tryAgainAction: AlertButtonAction = (Constant.Alert.actionTitleRequestError, action)
+        
+        showAlert(
+            title: Constant.Alert.titleRequestError,
+            message: error.localizedDescription,
+            actions: [tryAgainAction]
+        )
     }
 }
 
