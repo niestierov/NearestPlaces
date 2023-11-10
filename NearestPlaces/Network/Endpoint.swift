@@ -96,7 +96,7 @@ enum Endpoint {
         guard let urlString = urlBuilder.string else {
             return EndpointConstant.urlStringError
         }
-        debugPrint(urlString)
+
         return urlString
     }
 }

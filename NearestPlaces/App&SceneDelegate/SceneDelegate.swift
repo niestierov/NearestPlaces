@@ -25,7 +25,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = {
+            let controller = UINavigationController()
+            controller.setNavigationControllerAppearance()
+            return controller
+        }()
         let networkService = NetworkService()
         let router = Router(
             navigationController: navigationController,

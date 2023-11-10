@@ -58,6 +58,7 @@ final class MapPlacesViewController: UIViewController {
         
         title = Constant.navigationControllerTitle
         navigationItem.leftBarButtonItem = requestPlacesManuallyButton
+        
         setupMapView()
         setupLocationManager()
     }
@@ -79,7 +80,7 @@ private extension MapPlacesViewController {
         view.addSubview(mapView)
         
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -190,10 +191,7 @@ private extension MapPlacesViewController {
             return
         }
         
-        //: The next request is valid after a few sec delay
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: Constant.nextPageDelay) {
-            self.loadPlaces(endpoint: endpoint)
-        }
+        self.loadPlaces(endpoint: endpoint)
     }
     
     func handleSuccessRequest(data: Place?) {
@@ -209,7 +207,10 @@ private extension MapPlacesViewController {
         if let safeToken = safeData.nextPageToken {
             nextPageEndpoint = Endpoint.nextPage(token: safeToken)
             
-            requestNextPage()
+            //: The next request is valid after a few sec delay
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: Constant.nextPageDelay) {
+                self.requestNextPage()
+            }
         }
     }
     

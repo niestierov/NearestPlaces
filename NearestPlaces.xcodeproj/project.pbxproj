@@ -15,6 +15,7 @@
 		9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */; };
 		9A2D56B92AFCF315002A2A37 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B82AFCF315002A2A37 /* Endpoint.swift */; };
 		9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */; };
+		9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */; };
 		9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD52AF9114400B24002 /* AppDelegate.swift */; };
 		9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD72AF9114400B24002 /* SceneDelegate.swift */; };
 		9AE39FDF2AF9114600B24002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AE39FDE2AF9114600B24002 /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		9A2D56B82AFCF315002A2A37 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		9AE39FD22AF9114400B24002 /* NearestPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearestPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE39FD52AF9114400B24002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9AE39FD72AF9114400B24002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */,
+				9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				9A2D56B42AFCECC3002A2A37 /* Place.swift in Sources */,
 				9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */,
 				9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */,
+				9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */,
 				9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */,
 				9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */,
 			);
