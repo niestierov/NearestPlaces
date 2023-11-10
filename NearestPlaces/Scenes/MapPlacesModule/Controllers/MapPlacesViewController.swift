@@ -24,6 +24,7 @@ final class MapPlacesViewController: UIViewController {
             static let actionTitleRequestError = "Try Again"
             static let titleAuthorizationDenied = "Location Services Disabled"
             static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
+            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
             static let titleRequestError = "There is an Error"
         }
     }
@@ -105,7 +106,7 @@ private extension MapPlacesViewController {
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
         @unknown default:
-            break
+            handleFailureRequest(error: nil)
         }
     }
     
@@ -117,23 +118,6 @@ private extension MapPlacesViewController {
         mapView.camera = camera
         
         requestPlacesWithLocation(location)
-    }
-    
-    func handleAuthorizationStatusDenied() {
-        let action = {
-            if let appSettingsURL = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettingsURL) {
-                UIApplication.shared.open(appSettingsURL, options: [:])
-            }
-        }
-        
-        let cancelAction: AlertButtonAction = (Constant.Alert.actionTitleCancel, nil)
-        let settingsAction: AlertButtonAction = (Constant.Alert.actionTitleSettings, action)
-        
-        showAlert(
-            title: Constant.Alert.titleAuthorizationDenied,
-            message: Constant.Alert.messageAuthorizationDenied,
-            actions: [cancelAction, settingsAction]
-        )
     }
     
     func requestPlacesWithLocation(_ location: CLLocationCoordinate2D) {
@@ -214,7 +198,7 @@ private extension MapPlacesViewController {
         }
     }
     
-    func handleFailureRequest(error: Error) {
+    func handleFailureRequest(error: Error?) {
         let action = {
             self.locationManager.startUpdatingLocation()
         }
@@ -223,8 +207,25 @@ private extension MapPlacesViewController {
         
         showAlert(
             title: Constant.Alert.titleRequestError,
-            message: error.localizedDescription,
+            message: error?.localizedDescription ?? Constant.Alert.messageUnknownError,
             actions: [tryAgainAction]
+        )
+    }
+    
+    func handleAuthorizationStatusDenied() {
+        let action = {
+            if let appSettingsURL = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettingsURL) {
+                UIApplication.shared.open(appSettingsURL, options: [:])
+            }
+        }
+        
+        let cancelAction: AlertButtonAction = (Constant.Alert.actionTitleCancel, nil)
+        let settingsAction: AlertButtonAction = (Constant.Alert.actionTitleSettings, action)
+        
+        showAlert(
+            title: Constant.Alert.titleAuthorizationDenied,
+            message: Constant.Alert.messageAuthorizationDenied,
+            actions: [cancelAction, settingsAction]
         )
     }
 }

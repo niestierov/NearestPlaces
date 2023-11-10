@@ -84,7 +84,7 @@ enum Endpoint {
         }
     }
     
-    func fullURLString() -> String {
+    func fullURLString() -> String? {
         var urlBuilder = URLComponents()
         urlBuilder.scheme = scheme
         urlBuilder.host = host
@@ -94,7 +94,7 @@ enum Endpoint {
         }
         
         guard let urlString = urlBuilder.string else {
-            return EndpointConstant.urlStringError
+            return nil
         }
 
         return urlString
