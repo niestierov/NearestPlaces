@@ -34,7 +34,7 @@ final class MapPlacesViewController: UIViewController {
     private let networkService: NetworkService
     private var placesList: [PlaceInfo] = []
     private var markersList = Set<String>()
-    private var nextPageToken: String?
+    private var nextPageEndpoint: Endpoint?
     
     // MARK: - UIComponents -
     private var mapView: GMSMapView = {
@@ -44,12 +44,20 @@ final class MapPlacesViewController: UIViewController {
         map.translatesAutoresizingMaskIntoConstraints = false
         return map
     }()
-
+    private lazy var requestPlacesManuallyButton: UIBarButtonItem = {
+        let button = UIBarButtonItem()
+        button.image = UIImage(systemName: Constant.requestPlacesManuallyImage)
+        button.target = self
+        button.action = #selector(requestNextPage)
+        return button
+    }()
     
     // MARK: - LifeCycle -
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = Constant.navigationControllerTitle
+        navigationItem.leftBarButtonItem = requestPlacesManuallyButton
         setupMapView()
         setupLocationManager()
     }
@@ -177,12 +185,10 @@ private extension MapPlacesViewController {
         markersList.insert(place.name)
     }
     
-    func requestNextPage() {
-        guard let token = nextPageToken else {
+    @objc func requestNextPage() {
+        guard let endpoint = nextPageEndpoint else {
             return
         }
-        
-        let endpoint = Endpoint.nextPage(token: token)
         
         //: The next request is valid after a few sec delay
         DispatchQueue.global(qos: .background).asyncAfter(deadline: Constant.nextPageDelay) {
@@ -199,9 +205,12 @@ private extension MapPlacesViewController {
         placesList.append(contentsOf: dataResults)
         
         showPlaceMarkers(for: placesList)
-        
-        nextPageToken = safeData.nextPageToken
-        requestNextPage()
+
+        if let safeToken = safeData.nextPageToken {
+            nextPageEndpoint = Endpoint.nextPage(token: safeToken)
+            
+            requestNextPage()
+        }
     }
     
     func handleFailureRequest(error: Error) {
