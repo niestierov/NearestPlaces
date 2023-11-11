@@ -6,7 +6,6 @@ target 'NearestPlaces' do
   use_frameworks!
 
   pod 'GoogleMaps'
-  pod 'GooglePlaces'
   pod 'Alamofire'
 
 end

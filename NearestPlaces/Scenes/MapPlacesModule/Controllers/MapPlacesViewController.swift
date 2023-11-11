@@ -7,7 +7,6 @@
 
 import UIKit
 import GoogleMaps
-import GooglePlaces
 
 final class MapPlacesViewController: UIViewController {
     
@@ -31,7 +30,6 @@ final class MapPlacesViewController: UIViewController {
     
     // MARK: - Properties -
     private let locationManager = CLLocationManager()
-    private let placesClient = GMSPlacesClient.shared()
     private let networkService: NetworkService
     private var placesList: [PlaceInfo] = []
     private var markersList = Set<String>()
