@@ -8,7 +8,7 @@
 import Alamofire
 import Foundation
 
-private struct EndpointConstant {
+fileprivate enum EndpointConstant {
     static let urlScheme = "https"
     static let urlHost = "maps.googleapis.com"
     static let urlPath = "/maps/api/place/nearbysearch/json"
@@ -16,7 +16,7 @@ private struct EndpointConstant {
     static let urlStringError = "Error constructing URL."
 }
 
-struct APIConstant {
+fileprivate enum APIConstant {
     static let kLocation = "location"
     static let kRadius = "radius"
     static let kType = "types"

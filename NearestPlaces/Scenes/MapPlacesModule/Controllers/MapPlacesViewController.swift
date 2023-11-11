@@ -30,6 +30,7 @@ final class MapPlacesViewController: UIViewController {
     
     // MARK: - Properties -
     private let locationManager = CLLocationManager()
+    private let router: Router
     private let networkService: NetworkService
     private var placesList: [PlaceInfo] = []
     private var markersList = Set<String>()
@@ -62,7 +63,8 @@ final class MapPlacesViewController: UIViewController {
         setupLocationManager()
     }
     
-    init(networkService: NetworkService) {
+    init(router: Router, networkService: NetworkService) {
+        self.router = router
         self.networkService = networkService
         
         super.init(nibName: nil, bundle: nil)
@@ -108,10 +110,7 @@ private extension MapPlacesViewController {
         }
     }
     
-    func updateUserLocation(
-        location: CLLocationCoordinate2D,
-        zoom: Float = Constant.defaultZoom
-    ) {
+    func updateUserLocation(location: CLLocationCoordinate2D, zoom: Float = Constant.defaultZoom) {
         let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
         mapView.camera = camera
         
@@ -161,6 +160,7 @@ private extension MapPlacesViewController {
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         
         let marker = GMSMarker(position: location)
+        
         marker.title = place.name
         marker.snippet = place.vicinity
         marker.map = mapView

@@ -28,7 +28,7 @@ final class Router {
     
     // MARK: - Iternal -
     func showMapPlacesModule() {
-        let mapPlacesModule = MapPlacesViewController(networkService: networkService)
+        let mapPlacesModule = MapPlacesViewController(router: self, networkService: networkService)
         navigationController?.setViewControllers([mapPlacesModule], animated: true)
     }
 }

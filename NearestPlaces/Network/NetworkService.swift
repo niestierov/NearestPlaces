@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-protocol NetworkServiceProtocol {
+protocol NetworkServiceProtocol: AnyObject {
     func request<T: Decodable>(
         endpoint: Endpoint,
         type: T.Type,
