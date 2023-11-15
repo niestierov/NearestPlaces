@@ -8,31 +8,21 @@
 import UIKit
 
 extension UINavigationController {
-    
-    private enum Constant {
+    func setNavigationControllerAppearance(
+        opacity: CGFloat,
+        backgroundColor: UIColor,
+        titleColor: UIColor,
+        titleFont: UIFont,
+        isTranslucent: Bool = true
+    ) {
+        navigationBar.isTranslucent = isTranslucent
         
-        enum Style {
-            static let opacity: CGFloat = 0.9
-            static let whiteWithAlphaComponent = UIColor.white.withAlphaComponent(opacity)
-            static let boldFontSize: CGFloat = 20
-        }
-    }
-    
-    func setNavigationControllerAppearance() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = Constant.Style.whiteWithAlphaComponent
-
-        let textAttributes: [NSAttributedString.Key : Any] = [
-            .foregroundColor: UIColor.black,
-            .font: UIFont.boldSystemFont(ofSize: Constant.Style.boldFontSize)
+        navigationBar.backgroundColor = backgroundColor
+        navigationBar.barTintColor = backgroundColor
+        
+        navigationBar.titleTextAttributes = [
+            .foregroundColor: titleColor,
+            .font: titleFont
         ]
-        appearance.titleTextAttributes = textAttributes
-        
-
-        navigationBar.standardAppearance = appearance
-        navigationBar.compactAppearance = appearance
-        navigationBar.scrollEdgeAppearance = appearance
-        navigationBar.isTranslucent = true
     }
 }

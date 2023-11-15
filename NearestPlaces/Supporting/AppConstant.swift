@@ -5,8 +5,16 @@
 //  Created by Denys Niestierov on 09.11.2023.
 //
 
-import Foundation
+import UIKit
 
-struct AppConstant {
-    static let apiKeyGoogle = "API_KEY_GOOGLE"
-}
+typealias EmptyBlock = () -> Void
+typealias AlertButtonAction = (
+    title: String,
+    style: UIAlertAction.Style,
+    completion: EmptyBlock?
+)
+typealias Alert = (
+    title: String,
+    message: String,
+    actions: [AlertButtonAction]
+)

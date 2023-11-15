@@ -21,21 +21,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         startRootScreen(for: windowScene)
     }
 
-    func startRootScreen(for windowScene: UIWindowScene) {
+    private func startRootScreen(for windowScene: UIWindowScene) {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        let navigationController = UINavigationController()
-        navigationController.setNavigationControllerAppearance()
+        let mapPlacesViewController = MapPlacesViewController()
         
-        let networkService = NetworkService()
+        let navigationController = UINavigationController(rootViewController: mapPlacesViewController)
         
-        let router = Router(
-            navigationController: navigationController,
-            networkService: networkService
-        )
-        
-        router.showMapPlacesModule()
+        navigationController.setViewControllers([mapPlacesViewController], animated: true)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

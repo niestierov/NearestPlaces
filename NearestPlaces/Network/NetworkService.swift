@@ -17,7 +17,6 @@ protocol NetworkServiceProtocol: AnyObject {
 }
 
 final class NetworkService: NetworkServiceProtocol {
-    
     func request<T: Decodable>(
         endpoint: Endpoint,
         type: T.Type,
@@ -25,22 +24,24 @@ final class NetworkService: NetworkServiceProtocol {
     ) {
         guard let urlString = endpoint.fullURLString(),
               let url = URL(string: urlString) else {
-            completion(.failure(RequestError.invalidURL))
+            completion(.failure(NetworkError.invalidURL))
             return
         }
         
         AF.request(
             url,
             method: endpoint.method,
-            encoding: endpoint.encoding
+            parameters: endpoint.parameters,
+            encoding: endpoint.encoding,
+            headers: endpoint.headers
         ).responseDecodable(of: type) { response in
             guard response.data != nil else {
-                completion(.failure(RequestError.invalidData))
+                completion(.failure(NetworkError.invalidData))
                 return
             }
             
             switch response.result {
-            case .success(let data):
+            case .success(let data):                
                 completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
@@ -49,7 +50,7 @@ final class NetworkService: NetworkServiceProtocol {
     }
 }
 
-private enum RequestError: Error {
+private enum NetworkError: Error {
     case invalidURL
     case invalidData
 }
