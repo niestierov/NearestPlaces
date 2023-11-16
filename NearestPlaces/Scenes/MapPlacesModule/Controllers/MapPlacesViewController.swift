@@ -44,6 +44,7 @@ final class MapPlacesViewController: UIViewController {
     private lazy var showListPlacesButton: UIBarButtonItem = {
         let button = UIBarButtonItem()
         button.target = self
+        button.action = #selector(routeToListPlaces)
         button.image = UIImage(systemName: Constant.showListPlacesImage)
         return button
     }()
@@ -91,6 +92,11 @@ private extension MapPlacesViewController {
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    @objc func routeToListPlaces() {
+        let listPlacesModule = ListPlacesViewController(placesList: placesList)
+        navigationController?.pushViewController(listPlacesModule, animated: true)
     }
     
     func updateMap(

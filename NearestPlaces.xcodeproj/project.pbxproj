@@ -15,6 +15,8 @@
 		9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */; };
 		9A2D56B92AFCF315002A2A37 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B82AFCF315002A2A37 /* Endpoint.swift */; };
 		9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */; };
+		9A806D642B067DED00439893 /* ListPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D602B067DED00439893 /* ListPlacesViewController.swift */; };
+		9A806D652B067DED00439893 /* ListPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D622B067DED00439893 /* ListPlaceTableViewCell.swift */; };
 		9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */; };
 		9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD52AF9114400B24002 /* AppDelegate.swift */; };
 		9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD72AF9114400B24002 /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 		9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		9A2D56B82AFCF315002A2A37 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		9A806D602B067DED00439893 /* ListPlacesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPlacesViewController.swift; sourceTree = "<group>"; };
+		9A806D622B067DED00439893 /* ListPlaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPlaceTableViewCell.swift; sourceTree = "<group>"; };
 		9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		9AE39FD22AF9114400B24002 /* NearestPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearestPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE39FD52AF9114400B24002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +92,7 @@
 		9A2D56A12AFCDCF5002A2A37 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9A806D5B2B067DED00439893 /* ListPlacesModule */,
 				9A2D56A42AFCDD1B002A2A37 /* MapPlacesModule */,
 			);
 			path = Scenes;
@@ -153,6 +158,47 @@
 				9A2D56B82AFCF315002A2A37 /* Endpoint.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		9A806D5B2B067DED00439893 /* ListPlacesModule */ = {
+			isa = PBXGroup;
+			children = (
+				9A806D5E2B067DED00439893 /* Model */,
+				9A806D5F2B067DED00439893 /* Views */,
+				9A806D5C2B067DED00439893 /* Controller */,
+			);
+			path = ListPlacesModule;
+			sourceTree = "<group>";
+		};
+		9A806D5C2B067DED00439893 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9A806D602B067DED00439893 /* ListPlacesViewController.swift */,
+				9A806D612B067DED00439893 /* Cell */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9A806D5E2B067DED00439893 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9A806D5F2B067DED00439893 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9A806D612B067DED00439893 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				9A806D622B067DED00439893 /* ListPlaceTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		9AE39FC92AF9114400B24002 = {
@@ -338,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A2D56B22AFCE5C1002A2A37 /* AppConstant.swift in Sources */,
+				9A806D652B067DED00439893 /* ListPlaceTableViewCell.swift in Sources */,
 				9A2D56B92AFCF315002A2A37 /* Endpoint.swift in Sources */,
 				9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */,
 				9A2D56B42AFCECC3002A2A37 /* Place.swift in Sources */,
@@ -346,6 +393,7 @@
 				9AF4A2322B02853D006DB467 /* LocationService.swift in Sources */,
 				9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */,
 				9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */,
+				9A806D642B067DED00439893 /* ListPlacesViewController.swift in Sources */,
 				9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */,
 				9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */,
 				9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */,
