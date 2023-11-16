@@ -14,11 +14,12 @@ final class MapPlacesViewController: UIViewController {
         static let showListPlacesImage = "list.clipboard"
         static let defaultZoom: Float = 12
         
-        enum NavigationAppearence {
-            static let opacity: CGFloat = 0.9
-            static let whiteWithAlphaComponent = UIColor.white.withAlphaComponent(opacity)
-            static let boldFontSize = UIFont.boldSystemFont(ofSize: 20)
-            static let defaultTitleColor = UIColor.black
+        enum Alert {
+            static let actionTitleCancel = "Cancel"
+            static let actionTitleSettings = "Open Settings"
+            static let titleAuthorizationDenied = "Location Services Disabled"
+            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
+            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
         }
     }
     
@@ -58,16 +59,16 @@ final class MapPlacesViewController: UIViewController {
 private extension MapPlacesViewController {
     func setupLocationService() {
         locationService.delegate = self
+        
         locationService.verifyLocationPermissions()
-        locationService.showAuthorizationDeniedAlert = { alert in
-            self.showAlert(
-                title: alert.title,
-                message: alert.message,
-                actions: alert.actions
-            )
+        
+        locationService.handleAuthorizationDenied = { [weak self] in
+            self?.handleAuthorizationStatusDenied()
         }
-        locationService.showTryAgainAlert = { title, message, action in
-            self.showTryAgainAlert(message: message, action: action)
+        locationService.handleAuthorizationUnknown = { [weak self] in
+            self?.showTryAgainAlert(message: Constant.Alert.messageUnknownError) {
+                self?.locationService.verifyLocationPermissions()
+            }
         }
     }
     
@@ -75,12 +76,7 @@ private extension MapPlacesViewController {
         title = Constant.navigationControllerTitle
         navigationItem.rightBarButtonItem = showListPlacesButton
         
-        navigationController?.setNavigationControllerAppearance(
-            opacity: Constant.NavigationAppearence.opacity,
-            backgroundColor: Constant.NavigationAppearence.whiteWithAlphaComponent,
-            titleColor: Constant.NavigationAppearence.defaultTitleColor,
-            titleFont: Constant.NavigationAppearence.boldFontSize
-        )
+        navigationController?.setupNavigationBar()
     }
     
     func setupMapView() {
@@ -122,8 +118,9 @@ private extension MapPlacesViewController {
             case .success(let data):
                 self.handleSuccessRequest(data: data)
             case .failure(let error):
-                self.showTryAgainAlert(message: error.localizedDescription)
-                break
+                self.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
+                    self?.locationService.verifyLocationPermissions()
+                }
             }
         }
     }
@@ -161,10 +158,33 @@ private extension MapPlacesViewController {
         marker.snippet = address
         marker.map = mapView
     }
+    
+    func handleAuthorizationStatusDenied() {
+        let action = {
+            UIApplication.openAppSettings()
+        }
+        
+        let cancelAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleCancel,
+            style: .cancel,
+            completion: nil
+        )
+        let settingsAction: AlertButtonAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleSettings,
+            style: .default,
+            completion: action
+        )
+        
+        showAlert(
+            title: Constant.Alert.titleAuthorizationDenied,
+            message: Constant.Alert.messageAuthorizationDenied,
+            actions: [cancelAction, settingsAction]
+        )
+    }
 }
 
 extension MapPlacesViewController: LocationServiceDelegate {
-    func locationService(_ locationService: LocationService, didUpdateLocation location: CLLocationCoordinate2D) {
+    func didUpdateLocation(location: CLLocationCoordinate2D) {
         updateMap(location: location)
     }
 }

@@ -42,14 +42,8 @@ fileprivate enum APIConstant {
         static let location = "places.location"
         static let rating = "places.rating"
         static let defaultFieldMask =
-        """
-        \(APIConstant.Headers.name),
-        \(APIConstant.Headers.formattedAddress),
-        \(APIConstant.Headers.location),
-        \(APIConstant.Headers.iconMask),
-        \(APIConstant.Headers.rating)
-        """
-        static let apiKey: String = Bundle.main.object(forInfoDictionaryKey: GoogleServicesConfigurator.apiKeyGoogle) as? String ?? ""
+        "\(APIConstant.Headers.name),\(APIConstant.Headers.formattedAddress),\(APIConstant.Headers.location),\(APIConstant.Headers.iconMask),\(APIConstant.Headers.rating)"
+        static let apiKey: String = GoogleServicesConfigurator.getKey()
     }
 }
 

@@ -41,7 +41,7 @@ final class NetworkService: NetworkServiceProtocol {
             }
             
             switch response.result {
-            case .success(let data):                
+            case .success(let data):
                 completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))

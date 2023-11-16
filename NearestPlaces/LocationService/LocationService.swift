@@ -5,32 +5,24 @@
 //  Created by Denys Niestierov on 13.11.2023.
 //
 
-import CoreLocation
 import UIKit
+import CoreLocation
 
 protocol LocationServiceDelegate: AnyObject {
-    func locationService(_ locationService: LocationService, didUpdateLocation location: CLLocationCoordinate2D)
+    func didUpdateLocation(location: CLLocationCoordinate2D)
 }
 
 final class LocationService: NSObject {
     private enum Constant {
         static let distanceFilter: CLLocationDistance = 50
-        
-        enum Alert {
-            static let actionTitleCancel = "Cancel"
-            static let actionTitleSettings = "Open Settings"
-            static let titleAuthorizationDenied = "Location Services Disabled"
-            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
-            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
-        }
     }
     
     // MARK: - Properties -
     
     private let locationManager = CLLocationManager()
     weak var delegate: LocationServiceDelegate?
-    var showTryAgainAlert: ((String?, String, @escaping EmptyBlock) -> Void)?
-    var showAuthorizationDeniedAlert: ((Alert) -> Void)?
+    var handleAuthorizationUnknown: (() -> Void)?
+    var handleAuthorizationDenied: (() -> Void)?
     
     // MARK: - LifeCycle -
     
@@ -48,17 +40,13 @@ final class LocationService: NSObject {
             locationManager.requestWhenInUseAuthorization()
             
         case .restricted, .denied:
-            handleAuthorizationStatusDenied()
+            handleAuthorizationDenied?()
             
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
             
         @unknown default:
-            showTryAgainAlert?(
-                nil,
-                Constant.Alert.messageUnknownError,
-                verifyLocationPermissions
-            )
+            handleAuthorizationUnknown?()
         }
     }
 }
@@ -68,22 +56,6 @@ private extension LocationService {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.distanceFilter = Constant.distanceFilter
-    }
-    
-    func handleAuthorizationStatusDenied() {
-        let action = {
-            UIApplication.openAppSettings()
-        }
-        
-        let cancelAction: AlertButtonAction = (Constant.Alert.actionTitleCancel, .cancel, nil)
-        let settingsAction: AlertButtonAction = (Constant.Alert.actionTitleSettings, .default, action)
-        let alert = (
-            Constant.Alert.titleAuthorizationDenied,
-            Constant.Alert.messageAuthorizationDenied,
-            [cancelAction, settingsAction]
-        )
-        
-        showAuthorizationDeniedAlert?(alert)
     }
 }
 
@@ -97,6 +69,6 @@ extension LocationService: CLLocationManagerDelegate {
             return
         }
         
-        delegate?.locationService(self, didUpdateLocation: location)
+        delegate?.didUpdateLocation(location: location)
     }
 }

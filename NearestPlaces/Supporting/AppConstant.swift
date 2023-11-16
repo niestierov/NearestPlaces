@@ -8,13 +8,9 @@
 import UIKit
 
 typealias EmptyBlock = () -> Void
-typealias AlertButtonAction = (
-    title: String,
-    style: UIAlertAction.Style,
-    completion: EmptyBlock?
-)
-typealias Alert = (
-    title: String,
-    message: String,
-    actions: [AlertButtonAction]
-)
+
+struct AlertButtonAction {
+    let title: String
+    let style: UIAlertAction.Style
+    let completion: EmptyBlock?
+}

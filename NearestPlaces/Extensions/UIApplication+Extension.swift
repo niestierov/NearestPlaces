@@ -8,12 +8,10 @@
 import UIKit
 
 extension UIApplication {
-    static func openAppSettings(completion: ((Bool) -> Void)? = nil) {
+    static func openAppSettings() {
         if let appSettingsURL = URL(string: UIApplication.openSettingsURLString),
            UIApplication.shared.canOpenURL(appSettingsURL) {
-            UIApplication.shared.open(appSettingsURL, options: [:], completionHandler: completion)
-        } else {
-            completion?(false)
+            UIApplication.shared.open(appSettingsURL, options: [:])
         }
     }
 }
