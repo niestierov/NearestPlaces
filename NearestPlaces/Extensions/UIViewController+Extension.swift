@@ -7,13 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
-    private enum Constant {
-        static let defaultTryAgainAlertTitle = "Error"
-        static let defaultTryAgainActionTitle = "Try Again"
-        static let defaultCancelTitle = "Cancel"
-    }
-    
+extension UIViewController {    
     func showAlert(
         title: String,
         message: String,
@@ -33,29 +27,6 @@ extension UIViewController {
         }
         
         present(alertController, animated: true, completion: nil)
-    }
-    
-    func showTryAgainAlert(
-        title: String = Constant.defaultTryAgainAlertTitle,
-        message: String,
-        action: @escaping EmptyBlock
-    ) {
-        let cancelButton = AlertButtonAction(
-            title: Constant.defaultCancelTitle,
-            style: .cancel,
-            completion: nil
-        )
-        let tryAgainButton = AlertButtonAction(
-            title: Constant.defaultTryAgainActionTitle,
-            style: .default,
-            completion: action
-        )
-        
-        showAlert(
-            title: title,
-            message: message,
-            actions: [cancelButton, tryAgainButton]
-        )
     }
 }
 
