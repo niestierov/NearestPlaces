@@ -54,10 +54,13 @@ Thumbs.db
 #Pods
 
 Pods/
-Podfile.lock
 
 # UserData
 
 *.xcbkptlist
 xcuserdata/
 xcuserdata
+
+# Config files
+#*.xcconfig
+Secrets.xcconfig
