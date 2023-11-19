@@ -10,8 +10,10 @@ import GoogleMaps
 
 final class MapPlacesViewController: UIViewController {
     private enum Constant {
-        static let navigationControllerTitle = "Map"
-        static let showListPlacesImage = "list.clipboard"
+        static let defaultVerticalInset: CGFloat = 75
+        static let defaultHorizontalInset: CGFloat = 10
+        static let listPlacesButtonWidth: CGFloat = 56
+        static let listPlacesButtonImage = "list.clipboard"
         static let defaultZoom: Float = 12
         
         enum Alert {
@@ -41,11 +43,23 @@ final class MapPlacesViewController: UIViewController {
         map.translatesAutoresizingMaskIntoConstraints = false
         return map
     }()
-    private lazy var showListPlacesButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.target = self
-        button.action = #selector(routeToListPlaces)
-        button.image = UIImage(systemName: Constant.showListPlacesImage)
+    private lazy var listPlacesButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(
+            self,
+            action: #selector(routeToListPlaces),
+            for: .touchUpInside
+        )
+        let image = UIImage(systemName: Constant.listPlacesButtonImage)
+        button.setImage(image, for: .normal)
+        button.layer.cornerCurve = .continuous
+        button.backgroundColor = .white
+        button.tintColor = .darkGray
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 2
         return button
     }()
     
@@ -54,9 +68,16 @@ final class MapPlacesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigationBar()
+        navigationController?.isNavigationBarHidden = true
         setupMapView()
+        setupListPlacesButton()
         setupLocationService()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setupListPlacesButtonStyle()
     }
 }
 
@@ -76,13 +97,6 @@ private extension MapPlacesViewController {
         }
     }
     
-    func setupNavigationBar() {
-        title = Constant.navigationControllerTitle
-        navigationItem.rightBarButtonItem = showListPlacesButton
-        
-        navigationController?.setupNavigationBar()
-    }
-    
     func setupMapView() {
         view.addSubview(mapView)
         
@@ -92,6 +106,32 @@ private extension MapPlacesViewController {
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    func setupListPlacesButton() {
+        view.addSubview(listPlacesButton)
+        
+        NSLayoutConstraint.activate([
+            listPlacesButton.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -Constant.defaultVerticalInset
+            ),
+            listPlacesButton.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -Constant.defaultHorizontalInset
+            ),
+            listPlacesButton.widthAnchor.constraint(
+                equalToConstant: Constant.listPlacesButtonWidth
+            ),
+            listPlacesButton.heightAnchor.constraint(
+                equalTo: listPlacesButton.widthAnchor
+            ),
+        ])
+    }
+    
+    func setupListPlacesButtonStyle() {
+        let cornerRadius = listPlacesButton.frame.size.width / 2
+        listPlacesButton.layer.cornerRadius = cornerRadius
     }
     
     @objc func routeToListPlaces() {
@@ -142,7 +182,7 @@ private extension MapPlacesViewController {
 
         addMarkers(for: dataResults)
         
-        placesList.append(contentsOf: dataResults)
+        placesList = dataResults
     }
     
     func addMarkers(for places: [Place]) {

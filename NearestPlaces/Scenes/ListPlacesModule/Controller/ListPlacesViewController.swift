@@ -8,10 +8,10 @@
 import UIKit
 
 final class ListPlacesViewController: UIViewController {
-    
+
     // MARK: - Properties -
     
-    private var placesList: [Place]
+    private var placesList: [Place] = []
     
     // MARK: - UIComponents -
     
@@ -26,6 +26,7 @@ final class ListPlacesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.isNavigationBarHidden = false
         setupTableView()
     }
     
@@ -36,8 +37,6 @@ final class ListPlacesViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        self.placesList = []
-        
         super.init(coder: coder)
     }
 }
@@ -56,36 +55,45 @@ private extension ListPlacesViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        tableView.register(
-            ListPlaceTableViewCell.self,
-            forCellReuseIdentifier: ListPlaceTableViewCell.identifier
-        )
+        tableView.register(ListPlaceTableViewCell.self)
     }
 }
 
 extension ListPlacesViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
         return placesList.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ListPlaceTableViewCell.identifier,
-            for: indexPath
-        ) as! ListPlaceTableViewCell
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = tableView.dequeue(
+            cellType: ListPlaceTableViewCell.self,
+            at: indexPath
+        )
         
-        let item = placesList[indexPath.row]
-        let name = item.displayName?.text ?? ""
-        let address = item.formattedAddress ?? ""
-        //let icon = item.iconMaskBaseUri
-        cell.configure(name: name, vicinity: address)
+        cell.configure(place: placesList[indexPath.row])
         
         return cell
     }
 }
 
 extension ListPlacesViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

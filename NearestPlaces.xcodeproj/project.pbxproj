@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1628A5F0EF258FB47B6F7924 /* Pods_NearestPlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA3C5FC8DB27D5F0CBBA5E2 /* Pods_NearestPlaces.framework */; };
+		9A0A40B82B079FA600BF9832 /* Reusable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40B72B079FA600BF9832 /* Reusable+Extension.swift */; };
+		9A0A40BB2B07A08E00BF9832 /* UITableView + Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */; };
 		9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */; };
 		9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */; };
 		9A2D56B22AFCE5C1002A2A37 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B12AFCE5C1002A2A37 /* AppConstant.swift */; };
@@ -17,7 +19,6 @@
 		9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */; };
 		9A806D642B067DED00439893 /* ListPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D602B067DED00439893 /* ListPlacesViewController.swift */; };
 		9A806D652B067DED00439893 /* ListPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D622B067DED00439893 /* ListPlaceTableViewCell.swift */; };
-		9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */; };
 		9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD52AF9114400B24002 /* AppDelegate.swift */; };
 		9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD72AF9114400B24002 /* SceneDelegate.swift */; };
 		9AE39FDF2AF9114600B24002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9AE39FDE2AF9114600B24002 /* Assets.xcassets */; };
@@ -30,6 +31,8 @@
 		5F06B907F2F33671C1427E5C /* Pods-NearestPlaces.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearestPlaces.debug.xcconfig"; path = "Target Support Files/Pods-NearestPlaces/Pods-NearestPlaces.debug.xcconfig"; sourceTree = "<group>"; };
 		6BA3C5FC8DB27D5F0CBBA5E2 /* Pods_NearestPlaces.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearestPlaces.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		887C3A931A266400E5924FF0 /* Pods-NearestPlaces.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearestPlaces.release.xcconfig"; path = "Target Support Files/Pods-NearestPlaces/Pods-NearestPlaces.release.xcconfig"; sourceTree = "<group>"; };
+		9A0A40B72B079FA600BF9832 /* Reusable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reusable+Extension.swift"; sourceTree = "<group>"; };
+		9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + Reusable.swift"; sourceTree = "<group>"; };
 		9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlacesViewController.swift; sourceTree = "<group>"; };
 		9A2D56AF2AFCE445002A2A37 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
@@ -40,7 +43,6 @@
 		9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		9A806D602B067DED00439893 /* ListPlacesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPlacesViewController.swift; sourceTree = "<group>"; };
 		9A806D622B067DED00439893 /* ListPlaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPlaceTableViewCell.swift; sourceTree = "<group>"; };
-		9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		9AE39FD22AF9114400B24002 /* NearestPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearestPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AE39FD52AF9114400B24002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9AE39FD72AF9114400B24002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,8 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */,
-				9ABD8C4A2AFE554600720D8B /* UINavigationController+Extension.swift */,
 				9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */,
+				9A0A40B72B079FA600BF9832 /* Reusable+Extension.swift */,
+				9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -389,10 +392,11 @@
 				9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */,
 				9A2D56B42AFCECC3002A2A37 /* Place.swift in Sources */,
 				9AF4A22F2B027809006DB467 /* GoogleServicesConfigurator.swift in Sources */,
+				9A0A40BB2B07A08E00BF9832 /* UITableView + Reusable.swift in Sources */,
+				9A0A40B82B079FA600BF9832 /* Reusable+Extension.swift in Sources */,
 				9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */,
 				9AF4A2322B02853D006DB467 /* LocationService.swift in Sources */,
 				9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */,
-				9ABD8C4B2AFE554600720D8B /* UINavigationController+Extension.swift in Sources */,
 				9A806D642B067DED00439893 /* ListPlacesViewController.swift in Sources */,
 				9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */,
 				9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */,

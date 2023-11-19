@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+protocol Reusable: AnyObject { }
+
+extension Reusable {
+    static var identifier: String {
+        return String(describing: self)
+    }
+}
