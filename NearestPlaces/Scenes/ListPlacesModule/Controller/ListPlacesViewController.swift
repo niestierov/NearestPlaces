@@ -18,6 +18,7 @@ final class ListPlacesViewController: UIViewController {
     private var tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
+        table.allowsSelection = false
         return table
     }()
     
@@ -88,12 +89,5 @@ extension ListPlacesViewController: UITableViewDelegate {
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
         return UITableView.automaticDimension
-    }
-    
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

@@ -77,7 +77,7 @@ final class MapPlacesViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        setupListPlacesButtonStyle()
+        configureListPlacesButton()
     }
 }
 
@@ -129,7 +129,7 @@ private extension MapPlacesViewController {
         ])
     }
     
-    func setupListPlacesButtonStyle() {
+    func configureListPlacesButton() {
         let cornerRadius = listPlacesButton.frame.size.width / 2
         listPlacesButton.layer.cornerRadius = cornerRadius
     }

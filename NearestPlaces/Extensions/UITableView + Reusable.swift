@@ -15,7 +15,10 @@ extension UITableView {
     }
 
     func dequeue<T: Reusable>(cellType: T.Type, at indexPath: IndexPath) -> T {
-        guard let cell = dequeueReusableCell(withIdentifier: cellType.identifier, for: indexPath) as? T
+        guard let cell = dequeueReusableCell(
+            withIdentifier: cellType.identifier,
+            for: indexPath
+        ) as? T
         else {
             fatalError("cell of type \(cellType) not registered")
         }
