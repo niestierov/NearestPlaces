@@ -7,21 +7,18 @@
 
 import UIKit
 
-extension UITableViewCell: Reusable { }
+extension UITableViewCell: StringIdentifiable { }
 
 extension UITableView {
-    func register(_ cellType: Reusable.Type) {
+    func register(_ cellType: StringIdentifiable.Type) {
         register(cellType.self, forCellReuseIdentifier: cellType.identifier)
     }
 
-    func dequeue<T: Reusable>(cellType: T.Type, at indexPath: IndexPath) -> T {
-        guard let cell = dequeueReusableCell(
+    func dequeue<T: StringIdentifiable>(cellType: T.Type, at indexPath: IndexPath) -> T {
+        let cell = dequeueReusableCell(
             withIdentifier: cellType.identifier,
             for: indexPath
-        ) as? T
-        else {
-            fatalError("cell of type \(cellType) not registered")
-        }
+        ) as! T
         return cell
     }
 }

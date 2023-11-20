@@ -12,9 +12,15 @@ final class MapPlacesViewController: UIViewController {
     private enum Constant {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
-        static let listPlacesButtonWidth: CGFloat = 56
-        static let listPlacesButtonImage = "list.clipboard"
         static let defaultZoom: Float = 12
+        
+        enum ListPlacesButton {
+            static let shadowOpacity: Float = 0.3
+            static let shadowRadius: CGFloat = 2
+            static let width: CGFloat = 56
+            static let image = "list.clipboard"
+            static let shadowOffset = CGSize(width: 0, height: 2)
+        }
         
         enum Alert {
             static let actionTitleCancel = "Cancel"
@@ -34,9 +40,9 @@ final class MapPlacesViewController: UIViewController {
     private let networkService = NetworkService()
     private var placesList: [Place] = []
     
-    // MARK: - UIComponents -
+    // MARK: - UI Components -
     
-    private var mapView: GMSMapView = {
+    private lazy var mapView: GMSMapView = {
         let map = GMSMapView()
         map.settings.myLocationButton = true
         map.isMyLocationEnabled = true
@@ -48,27 +54,26 @@ final class MapPlacesViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(
             self,
-            action: #selector(routeToListPlaces),
+            action: #selector(showPlacesList),
             for: .touchUpInside
         )
-        let image = UIImage(systemName: Constant.listPlacesButtonImage)
+        let image = UIImage(systemName: Constant.ListPlacesButton.image)
         button.setImage(image, for: .normal)
-        button.layer.cornerCurve = .continuous
-        button.backgroundColor = .white
-        button.tintColor = .darkGray
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.3
-        button.layer.shadowOffset = CGSize(width: 0, height: 2)
-        button.layer.shadowRadius = 2
+        button.configure(
+            tintColor: .darkGray,
+            shadowOpacity: Constant.ListPlacesButton.shadowOpacity,
+            shadowOffset: Constant.ListPlacesButton.shadowOffset,
+            shadowRadius: Constant.ListPlacesButton.shadowRadius
+        )
         return button
     }()
     
-    // MARK: - LifeCycle -
+    // MARK: - Life Cycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.isNavigationBarHidden = true
+        setupNavigationBar()
         setupMapView()
         setupListPlacesButton()
         setupLocationService()
@@ -77,11 +82,15 @@ final class MapPlacesViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        configureListPlacesButton()
+        listPlacesButton.setCornerRadius(roundedCornerRadius: true)
     }
 }
 
 private extension MapPlacesViewController {
+    func setupNavigationBar() {
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     func setupLocationService() {
         locationService.delegate = self
         
@@ -121,7 +130,7 @@ private extension MapPlacesViewController {
                 constant: -Constant.defaultHorizontalInset
             ),
             listPlacesButton.widthAnchor.constraint(
-                equalToConstant: Constant.listPlacesButtonWidth
+                equalToConstant: Constant.ListPlacesButton.width
             ),
             listPlacesButton.heightAnchor.constraint(
                 equalTo: listPlacesButton.widthAnchor
@@ -129,13 +138,8 @@ private extension MapPlacesViewController {
         ])
     }
     
-    func configureListPlacesButton() {
-        let cornerRadius = listPlacesButton.frame.size.width / 2
-        listPlacesButton.layer.cornerRadius = cornerRadius
-    }
-    
-    @objc func routeToListPlaces() {
-        let listPlacesModule = ListPlacesViewController(placesList: placesList)
+    @objc func showPlacesList() {
+        let listPlacesModule = PlacesListViewController(placesList: placesList)
         navigationController?.pushViewController(listPlacesModule, animated: true)
     }
     

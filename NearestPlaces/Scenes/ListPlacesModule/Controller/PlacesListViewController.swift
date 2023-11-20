@@ -7,27 +7,28 @@
 
 import UIKit
 
-final class ListPlacesViewController: UIViewController {
+final class PlacesListViewController: UIViewController {
 
     // MARK: - Properties -
     
     private var placesList: [Place] = []
     
-    // MARK: - UIComponents -
+    // MARK: - UI Components -
     
-    private var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.allowsSelection = false
+        table.estimatedRowHeight = UITableView.automaticDimension
         return table
     }()
     
-    // MARK: - LifeCycle -
+    // MARK: - Life Cycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.isNavigationBarHidden = false
+        setupNavigationBar()
         setupTableView()
     }
     
@@ -42,10 +43,13 @@ final class ListPlacesViewController: UIViewController {
     }
 }
 
-private extension ListPlacesViewController {
+private extension PlacesListViewController {
+    func setupNavigationBar() {
+        navigationController?.isNavigationBarHidden = false
+    }
+    
     func setupTableView() {
         tableView.dataSource = self
-        tableView.delegate = self
         
         view.addSubview(tableView)
         
@@ -56,11 +60,11 @@ private extension ListPlacesViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
-        tableView.register(ListPlaceTableViewCell.self)
+        tableView.register(PlaceListTableViewCell.self)
     }
 }
 
-extension ListPlacesViewController: UITableViewDataSource {
+extension PlacesListViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
@@ -73,21 +77,12 @@ extension ListPlacesViewController: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         let cell = tableView.dequeue(
-            cellType: ListPlaceTableViewCell.self,
+            cellType: PlaceListTableViewCell.self,
             at: indexPath
         )
         
         cell.configure(place: placesList[indexPath.row])
         
         return cell
-    }
-}
-
-extension ListPlacesViewController: UITableViewDelegate {
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath
-    ) -> CGFloat {
-        return UITableView.automaticDimension
     }
 }
