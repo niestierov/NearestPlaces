@@ -25,7 +25,7 @@ final class ImageService {
             imageView.image = placeholder
             return
         }
-        
+
         setImage(with: url, for: imageView)
     }
 }

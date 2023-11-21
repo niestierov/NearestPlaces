@@ -126,8 +126,8 @@ final class PlaceListTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        iconImageView.kf.cancelDownloadTask()
         
+        iconImageView.kf.cancelDownloadTask()
         iconImageView.image = nil
     }
     
@@ -144,11 +144,13 @@ final class PlaceListTableViewCell: UITableViewCell {
         addressLabel.text = address
         ratingLabel.text = rating.stringValue
         
-        iconImageView.setImage(
-            with: iconString,
-            type: Constant.iconType,
-            placeholder: placeholderImage
-        )
+        DispatchQueue.main.async {
+            self.iconImageView.setImage(
+                with: iconString,
+                type: Constant.iconType,
+                placeholder: placeholderImage
+            )
+        }
     }
 }
 
