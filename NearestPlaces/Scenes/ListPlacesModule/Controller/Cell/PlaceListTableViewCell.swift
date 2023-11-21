@@ -137,20 +137,17 @@ final class PlaceListTableViewCell: UITableViewCell {
         let name = place.displayName?.text ?? Constant.Title.nameOptional
         let address = place.formattedAddress ?? Constant.Title.addressOptional
         let rating = place.rating ?? .zero
-        let iconString = place.iconMaskBaseUri ?? ""
+        let iconString = (place.iconMaskBaseUri ?? "") + Constant.iconType
         let placeholderImage = UIImage(systemName: Constant.placeholderIconImage)
         
         nameLabel.text = name
         addressLabel.text = address
         ratingLabel.text = rating.stringValue
         
-        DispatchQueue.main.async {
-            self.iconImageView.setImage(
-                with: iconString,
-                type: Constant.iconType,
-                placeholder: placeholderImage
-            )
-        }
+        iconImageView.setImage(
+            with: iconString,
+            placeholder: placeholderImage
+        )
     }
 }
 

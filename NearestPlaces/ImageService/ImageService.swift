@@ -11,21 +11,33 @@ import Kingfisher
 final class ImageService {
     static let shared = ImageService()
     
-    func setImage(with url: URL, for imageView: UIImageView) {
-        imageView.kf.setImage(with: url)
+    private init() { }
+    
+    func setImage(with url: URL, for imageView: UIImageView, placeholder: UIImage?) {
+        imageView.kf.setImage(with: url) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let value):
+                    imageView.image = value.image
+                case .failure(_):
+                    imageView.image = placeholder
+                }
+            }
+        }
     }
     
     func setImage(
-        with string: String,
-        type: String,
+        string: String,
         for imageView: UIImageView,
         placeholder: UIImage? = nil
     ) {
-        guard let url = URL(string: string + type) else {
-            imageView.image = placeholder
+        guard let url = URL(string: string) else {
+            DispatchQueue.main.async {
+                imageView.image = placeholder
+            }
             return
         }
-
-        setImage(with: url, for: imageView)
+        
+        setImage(with: url, for: imageView, placeholder: placeholder)
     }
 }

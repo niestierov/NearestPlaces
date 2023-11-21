@@ -59,8 +59,9 @@ final class MapPlacesViewController: UIViewController {
         )
         let image = UIImage(systemName: Constant.ListPlacesButton.image)
         button.setImage(image, for: .normal)
-        button.configure(
-            tintColor: .darkGray,
+        button.backgroundColor = .white
+        button.tintColor = .darkGray
+        button.applyShadow(
             shadowOpacity: Constant.ListPlacesButton.shadowOpacity,
             shadowOffset: Constant.ListPlacesButton.shadowOffset,
             shadowRadius: Constant.ListPlacesButton.shadowRadius
@@ -82,7 +83,7 @@ final class MapPlacesViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        listPlacesButton.setCornerRadius(roundedCornerRadius: true)
+        listPlacesButton.setRoundedCornerRadius()
     }
 }
 

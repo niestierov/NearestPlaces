@@ -9,6 +9,6 @@ import Foundation
 
 extension Double {
     var stringValue: String {
-        return String(describing: self)
+        return String(format: "%.1f", self)
     }
 }

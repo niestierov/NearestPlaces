@@ -19,7 +19,7 @@ final class PlacesListViewController: UIViewController {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.allowsSelection = false
-        table.estimatedRowHeight = UITableView.automaticDimension
+        table.rowHeight = UITableView.automaticDimension
         return table
     }()
     

@@ -8,11 +8,11 @@
 import UIKit
 
 extension UIImageView {
-    func setImage(with url: URL) {
-        ImageService.shared.setImage(with: url, for: self)
+    func setImage(with url: URL, placeholder: UIImage? = nil) {
+        ImageService.shared.setImage(with: url, for: self, placeholder: placeholder)
     }
 
-    func setImage(with urlString: String, type: String, placeholder: UIImage? = nil) {
-        ImageService.shared.setImage(with: urlString, type: type, for: self, placeholder: placeholder)
+    func setImage(with urlString: String, placeholder: UIImage? = nil) {
+        ImageService.shared.setImage(string: urlString, for: self, placeholder: placeholder)
     }
 }
