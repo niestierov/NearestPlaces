@@ -10,20 +10,20 @@ import UIKit
 extension UIView {
     var cornerRadius: CGFloat {
         get {
-            return self.layer.cornerRadius
+            return layer.cornerRadius
         }
         set {
-            self.layer.cornerRadius = newValue
+            layer.cornerRadius = newValue
         }
     }
     
     func setRoundedCornerRadius(
         cornerCurve: CALayerCornerCurve = .continuous
     ) {
-        self.layer.cornerCurve = cornerCurve
+        layer.cornerCurve = cornerCurve
         
         let roundedRadius = self.frame.width / 2
-        self.cornerRadius = roundedRadius
+        cornerRadius = roundedRadius
     }
     
     func applyShadow(
@@ -32,9 +32,9 @@ extension UIView {
         shadowOffset: CGSize = .zero,
         shadowRadius: CGFloat = .zero
     ) {
-        self.layer.shadowColor = shadowColor
-        self.layer.shadowOpacity = shadowOpacity
-        self.layer.shadowOffset = shadowOffset
-        self.layer.shadowRadius = shadowRadius
+        layer.shadowColor = shadowColor
+        layer.shadowOpacity = shadowOpacity
+        layer.shadowOffset = shadowOffset
+        layer.shadowRadius = shadowRadius
     }
 }

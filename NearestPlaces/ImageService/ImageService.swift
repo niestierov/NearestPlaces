@@ -32,9 +32,7 @@ final class ImageService {
         placeholder: UIImage? = nil
     ) {
         guard let url = URL(string: string) else {
-            DispatchQueue.main.async {
-                imageView.image = placeholder
-            }
+            imageView.image = placeholder
             return
         }
         

@@ -127,13 +127,14 @@ final class PlaceListTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        iconImageView.kf.cancelDownloadTask()
         iconImageView.image = nil
     }
     
     // MARK: - Internal -
     
     func configure(place: Place) {
+        iconImageView.kf.cancelDownloadTask()
+        
         let name = place.displayName?.text ?? Constant.Title.nameOptional
         let address = place.formattedAddress ?? Constant.Title.addressOptional
         let rating = place.rating ?? .zero
