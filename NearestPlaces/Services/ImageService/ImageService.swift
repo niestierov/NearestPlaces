@@ -18,7 +18,7 @@ final class ImageService {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let value):
-                    imageView.image = value.image
+                    imageView.image = value.image.withTintColor(.label)
                 case .failure(_):
                     imageView.image = placeholder
                 }

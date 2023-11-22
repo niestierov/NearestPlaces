@@ -98,13 +98,13 @@
 			path = ImageService;
 			sourceTree = "<group>";
 		};
-		9A2D56A02AFCDCEE002A2A37 /* App&SceneDelegate */ = {
+		9A2D56A02AFCDCEE002A2A37 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				9AE39FD52AF9114400B24002 /* AppDelegate.swift */,
 				9AE39FD72AF9114400B24002 /* SceneDelegate.swift */,
 			);
-			path = "App&SceneDelegate";
+			path = App;
 			sourceTree = "<group>";
 		};
 		9A2D56A12AFCDCF5002A2A37 /* Scenes */ = {
@@ -245,11 +245,9 @@
 		9AE39FD42AF9114400B24002 /* NearestPlaces */ = {
 			isa = PBXGroup;
 			children = (
-				9A2D56A02AFCDCEE002A2A37 /* App&SceneDelegate */,
+				9A2D56A02AFCDCEE002A2A37 /* App */,
 				9A2D56A12AFCDCF5002A2A37 /* Scenes */,
-				9A2A7CBF2B0B9FCE0027CCF2 /* ImageService */,
-				9AF4A22D2B027800006DB467 /* GoogleServicesConfigurator */,
-				9AF4A2302B028534006DB467 /* LocationService */,
+				9AFB96182B0E3F2A008BC6D1 /* Services */,
 				9A2D56B52AFCEFC7002A2A37 /* Network */,
 				9A2D56B02AFCE5AA002A2A37 /* Extensions */,
 				9A2D56A32AFCDCFE002A2A37 /* Supporting */,
@@ -272,6 +270,16 @@
 				9AF4A2312B02853D006DB467 /* LocationService.swift */,
 			);
 			path = LocationService;
+			sourceTree = "<group>";
+		};
+		9AFB96182B0E3F2A008BC6D1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9A2A7CBF2B0B9FCE0027CCF2 /* ImageService */,
+				9AF4A22D2B027800006DB467 /* GoogleServicesConfigurator */,
+				9AF4A2302B028534006DB467 /* LocationService */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

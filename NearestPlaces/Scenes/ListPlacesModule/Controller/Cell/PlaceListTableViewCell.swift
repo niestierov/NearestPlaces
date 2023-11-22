@@ -17,6 +17,8 @@ final class PlaceListTableViewCell: UITableViewCell {
         static let imageViewWidth: CGFloat = 50
         static let stackViewSpacing: CGFloat = 15
         static let defaultTitleWidth: CGFloat = 75
+        static let imageColorName = "SystemDefault"
+        static let imageColor = UIColor(named: Constant.imageColorName)
         
         enum Title {
             static let name = "Name:"
@@ -101,6 +103,7 @@ final class PlaceListTableViewCell: UITableViewCell {
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
         return label
     }()
     private lazy var iconImageView: UIImageView = {
