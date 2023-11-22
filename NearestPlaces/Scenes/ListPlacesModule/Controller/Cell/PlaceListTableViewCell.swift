@@ -124,16 +124,10 @@ final class PlaceListTableViewCell: UITableViewCell {
         setupView()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        iconImageView.image = nil
-    }
-    
     // MARK: - Internal -
     
     func configure(place: Place) {
-        iconImageView.kf.cancelDownloadTask()
+        resetImage()
         
         let name = place.displayName?.text ?? Constant.Title.nameOptional
         let address = place.formattedAddress ?? Constant.Title.addressOptional
@@ -200,5 +194,10 @@ private extension PlaceListTableViewCell {
             addressTitleLabel.widthAnchor.constraint(equalToConstant: Constant.defaultTitleWidth),
             nameTitleLabel.widthAnchor.constraint(equalToConstant: Constant.defaultTitleWidth),
         ])
+    }
+    
+    func resetImage() {
+        iconImageView.kf.cancelDownloadTask()
+        iconImageView.image = nil
     }
 }
