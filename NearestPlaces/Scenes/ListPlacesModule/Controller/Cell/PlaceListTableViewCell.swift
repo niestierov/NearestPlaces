@@ -70,6 +70,7 @@ final class PlaceListTableViewCell: UITableViewCell {
         label.text = Constant.Title.name
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = Constant.titleNumberOfLines
+        label.textColor = .white
         return label
     }()
     private lazy var addressTitleLabel: UILabel = {
@@ -77,6 +78,7 @@ final class PlaceListTableViewCell: UITableViewCell {
         label.text = Constant.Title.address
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = Constant.titleNumberOfLines
+        label.textColor = .white
         return label
     }()
     private lazy var ratingTitleLabel: UILabel = {
@@ -84,24 +86,27 @@ final class PlaceListTableViewCell: UITableViewCell {
         label.text = Constant.Title.rating
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = Constant.titleNumberOfLines
+        label.textColor = .white
         return label
     }()
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = .zero
+        label.textColor = .white
         return label
     }()
     private lazy var addressLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = .zero
+        label.textColor = .white
         return label
     }()
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .label
+        label.textColor = .white
         return label
     }()
     private lazy var iconImageView: UIImageView = {
