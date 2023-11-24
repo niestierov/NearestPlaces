@@ -5,20 +5,24 @@ PODS:
   - GoogleMaps/Base (8.2.0)
   - GoogleMaps/Maps (8.2.0):
     - GoogleMaps/Base
+  - Kingfisher (7.10.0)
 
 DEPENDENCIES:
   - Alamofire
   - GoogleMaps
+  - Kingfisher
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - GoogleMaps
+    - Kingfisher
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
   GoogleMaps: 081f2547b60a1c0870a8f49166a653900e5055d5
+  Kingfisher: a18f05d3b6d37d8650ee4a3e61d57a28fc6207f6
 
-PODFILE CHECKSUM: 054090915a88630227738dae0aa1c7490667d5f1
+PODFILE CHECKSUM: 1823f9d76d1c47e5312935a87efd7e57881b45d8
 
 COCOAPODS: 1.11.3

@@ -10,9 +10,17 @@ import GoogleMaps
 
 final class MapPlacesViewController: UIViewController {
     private enum Constant {
-        static let navigationControllerTitle = "Map"
-        static let showListPlacesImage = "list.clipboard"
+        static let defaultVerticalInset: CGFloat = 75
+        static let defaultHorizontalInset: CGFloat = 10
         static let defaultZoom: Float = 12
+        
+        enum ListPlacesButton {
+            static let shadowOpacity: Float = 0.3
+            static let shadowRadius: CGFloat = 2
+            static let width: CGFloat = 56
+            static let image = "list.clipboard"
+            static let shadowOffset = CGSize(width: 0, height: 2)
+        }
         
         enum Alert {
             static let actionTitleCancel = "Cancel"
@@ -32,34 +40,58 @@ final class MapPlacesViewController: UIViewController {
     private let networkService = NetworkService()
     private var placesList: [Place] = []
     
-    // MARK: - UIComponents -
+    // MARK: - UI Components -
     
-    private var mapView: GMSMapView = {
+    private lazy var mapView: GMSMapView = {
         let map = GMSMapView()
         map.settings.myLocationButton = true
         map.isMyLocationEnabled = true
         map.translatesAutoresizingMaskIntoConstraints = false
         return map
     }()
-    private lazy var showListPlacesButton: UIBarButtonItem = {
-        let button = UIBarButtonItem()
-        button.target = self
-        button.image = UIImage(systemName: Constant.showListPlacesImage)
+    private lazy var listPlacesButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(
+            self,
+            action: #selector(showPlacesList),
+            for: .touchUpInside
+        )
+        let image = UIImage(systemName: Constant.ListPlacesButton.image)
+        button.setImage(image, for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .darkGray
+        button.applyShadow(
+            shadowOpacity: Constant.ListPlacesButton.shadowOpacity,
+            shadowOffset: Constant.ListPlacesButton.shadowOffset,
+            shadowRadius: Constant.ListPlacesButton.shadowRadius
+        )
         return button
     }()
     
-    // MARK: - LifeCycle -
+    // MARK: - Life Cycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigationBar()
         setupMapView()
+        setupListPlacesButton()
         setupLocationService()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        listPlacesButton.setRoundedCornerRadius()
     }
 }
 
 private extension MapPlacesViewController {
+    func setupNavigationBar() {
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     func setupLocationService() {
         locationService.delegate = self
         
@@ -75,13 +107,6 @@ private extension MapPlacesViewController {
         }
     }
     
-    func setupNavigationBar() {
-        title = Constant.navigationControllerTitle
-        navigationItem.rightBarButtonItem = showListPlacesButton
-        
-        navigationController?.setupNavigationBar()
-    }
-    
     func setupMapView() {
         view.addSubview(mapView)
         
@@ -91,6 +116,32 @@ private extension MapPlacesViewController {
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    func setupListPlacesButton() {
+        view.addSubview(listPlacesButton)
+        
+        NSLayoutConstraint.activate([
+            listPlacesButton.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -Constant.defaultVerticalInset
+            ),
+            listPlacesButton.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -Constant.defaultHorizontalInset
+            ),
+            listPlacesButton.widthAnchor.constraint(
+                equalToConstant: Constant.ListPlacesButton.width
+            ),
+            listPlacesButton.heightAnchor.constraint(
+                equalTo: listPlacesButton.widthAnchor
+            ),
+        ])
+    }
+    
+    @objc func showPlacesList() {
+        let listPlacesModule = PlacesListViewController(placesList: placesList)
+        navigationController?.pushViewController(listPlacesModule, animated: true)
     }
     
     func updateMap(
@@ -136,7 +187,7 @@ private extension MapPlacesViewController {
 
         addMarkers(for: dataResults)
         
-        placesList.append(contentsOf: dataResults)
+        placesList = dataResults
     }
     
     func addMarkers(for places: [Place]) {
