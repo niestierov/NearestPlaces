@@ -1,0 +1,149 @@
+//
+//  MapPlacesPresenter.swift
+//  NearestPlaces
+//
+//  Created by Denys Niestierov on 24.11.2023.
+//
+
+import UIKit
+import CoreLocation
+
+protocol MapPlacesPresenterProtocol {
+    var placesList: [Place] { get }
+    
+    func fetchPlaces(location: CLLocationCoordinate2D)
+    func handleAuthorizationStatusDenied()
+    func createTryAgainAlert(
+        message: String,
+        action: @escaping EmptyBlock
+    )
+    func createPlacesListModule() -> PlacesListViewController
+}
+
+final class MapPlacesPresenter: MapPlacesPresenterProtocol {
+    private enum Constant {
+        enum Alert {
+            static let actionTitleCancel = "Cancel"
+            static let actionTitleSettings = "Open Settings"
+            static let titleAuthorizationDenied = "Location Services Disabled"
+            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
+            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
+            static let defaultTryAgainAlertTitle = "Error"
+            static let defaultTryAgainActionTitle = "Try Again"
+            static let defaultCancelTitle = "Cancel"
+        }
+    }
+    
+    // MARK: - Properties -
+    
+    private weak var view: MapPlacesViewProtocol?
+    private let networkService = NetworkService()
+    private(set) var placesList: [Place] = []
+    
+    // MARK: - Internal -
+    
+    func inject(view: MapPlacesViewProtocol) {
+        self.view = view
+    }
+    
+    func createPlacesListModule() -> PlacesListViewController {
+        let placesListPresenter = PlacesListPresenter(placesList: placesList)
+        let viewController = PlacesListViewController.instantiate(with: placesListPresenter)
+        placesListPresenter.inject(view: viewController)
+        
+        return viewController
+    }
+    
+    func handleAuthorizationStatusDenied() {
+        let action = {
+            UIApplication.openAppSettings()
+        }
+        
+        let cancelAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleCancel,
+            style: .cancel,
+            completion: nil
+        )
+        let settingsAction: AlertButtonAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleSettings,
+            style: .default,
+            completion: action
+        )
+        
+        view?.showAlert(
+            title: Constant.Alert.titleAuthorizationDenied,
+            message: Constant.Alert.messageAuthorizationDenied,
+            actions: [cancelAction, settingsAction]
+        )
+    }
+    
+    func createTryAgainAlert(
+        message: String,
+        action: @escaping EmptyBlock
+    ) {
+        let cancelButton = AlertButtonAction(
+            title: Constant.Alert.defaultCancelTitle,
+            style: .cancel,
+            completion: nil
+        )
+        let tryAgainButton = AlertButtonAction(
+            title: Constant.Alert.defaultTryAgainActionTitle,
+            style: .default,
+            completion: action
+        )
+        
+        view?.showAlert(
+            title: Constant.Alert.defaultTryAgainAlertTitle,
+            message: message,
+            actions: [cancelButton, tryAgainButton]
+        )
+    }
+    
+    func fetchPlaces(location: CLLocationCoordinate2D) {
+        let endpoint = Endpoint.searchNearby(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+        
+        networkService.request(
+            endpoint: endpoint,
+            type: NearbySearchResponse.self
+        ) { [weak self] response in
+            guard let self else {
+                return
+            }
+            
+            switch response {
+            case .success(let data):
+                self.handleSuccessRequest(data: data)
+            case .failure(let error):
+                self.createTryAgainAlert(message: error.localizedDescription) { [weak self] in
+                    self?.view?.locationService.verifyLocationPermissions()
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Private -
+
+private extension MapPlacesPresenter {
+    func handleSuccessRequest(data: NearbySearchResponse?) {
+        guard let safeData = data,
+              let dataResults = safeData.places else {
+            return
+        }
+
+        addMarkers(for: dataResults)
+        
+        placesList = dataResults
+    }
+    
+    func addMarkers(for places: [Place]) {
+        DispatchQueue.main.async {
+            for place in places {
+                self.view?.addMarker(for: place)
+            }
+        }
+    }
+}

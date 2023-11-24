@@ -8,11 +8,29 @@
 import UIKit
 import GoogleMaps
 
+protocol MapPlacesViewProtocol: AnyObject {
+    var locationService: LocationService { get }
+    
+    func addMarker(for place: Place)
+    func showAlert(
+        title: String,
+        message: String,
+        actions: [AlertButtonAction]
+    )
+}
+
 final class MapPlacesViewController: UIViewController {
+    static func instantiate(with presenter: MapPlacesPresenterProtocol) -> MapPlacesViewController {
+        let viewController = MapPlacesViewController()
+        viewController.presenter = presenter
+        return viewController
+    }
+    
     private enum Constant {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
         static let defaultZoom: Float = 12
+        static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
         
         enum ListPlacesButton {
             static let shadowOpacity: Float = 0.3
@@ -21,24 +39,12 @@ final class MapPlacesViewController: UIViewController {
             static let image = "list.clipboard"
             static let shadowOffset = CGSize(width: 0, height: 2)
         }
-        
-        enum Alert {
-            static let actionTitleCancel = "Cancel"
-            static let actionTitleSettings = "Open Settings"
-            static let titleAuthorizationDenied = "Location Services Disabled"
-            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
-            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
-            static let defaultTryAgainAlertTitle = "Error"
-            static let defaultTryAgainActionTitle = "Try Again"
-            static let defaultCancelTitle = "Cancel"
-        }
     }
     
     // MARK: - Properties -
     
-    private let locationService = LocationService()
-    private let networkService = NetworkService()
-    private var placesList: [Place] = []
+    private var presenter: MapPlacesPresenterProtocol!
+    private(set) var locationService = LocationService()
     
     // MARK: - UI Components -
     
@@ -87,6 +93,8 @@ final class MapPlacesViewController: UIViewController {
     }
 }
 
+// MARK: - Private -
+
 private extension MapPlacesViewController {
     func setupNavigationBar() {
         navigationController?.isNavigationBarHidden = true
@@ -98,10 +106,10 @@ private extension MapPlacesViewController {
         locationService.verifyLocationPermissions()
         
         locationService.handleAuthorizationDenied = { [weak self] in
-            self?.handleAuthorizationStatusDenied()
+            self?.presenter.handleAuthorizationStatusDenied()
         }
         locationService.handleAuthorizationUnknown = { [weak self] in
-            self?.showTryAgainAlert(message: Constant.Alert.messageUnknownError) {
+            self?.presenter.createTryAgainAlert(message: Constant.messageUnknownError) {
                 self?.locationService.verifyLocationPermissions()
             }
         }
@@ -140,8 +148,8 @@ private extension MapPlacesViewController {
     }
     
     @objc func showPlacesList() {
-        let listPlacesModule = PlacesListViewController(placesList: placesList)
-        navigationController?.pushViewController(listPlacesModule, animated: true)
+        let viewController = presenter.createPlacesListModule()
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func updateMap(
@@ -151,53 +159,13 @@ private extension MapPlacesViewController {
         let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
         mapView.camera = camera
         
-        fetchPlaces(location: location)
+        presenter.fetchPlaces(location: location)
     }
-    
-    func fetchPlaces(location: CLLocationCoordinate2D) {
-        let endpoint = Endpoint.searchNearby(
-            latitude: location.latitude,
-            longitude: location.longitude
-        )
-        
-        networkService.request(
-            endpoint: endpoint,
-            type: NearbySearchResponse.self
-        ) { [weak self] response in
-            guard let self else {
-                return
-            }
-            
-            switch response {
-            case .success(let data):
-                self.handleSuccessRequest(data: data)
-            case .failure(let error):
-                self.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
-                    self?.locationService.verifyLocationPermissions()
-                }
-            }
-        }
-    }
-    
-    func handleSuccessRequest(data: NearbySearchResponse?) {
-        guard let safeData = data,
-              let dataResults = safeData.places else {
-            return
-        }
+}
 
-        addMarkers(for: dataResults)
-        
-        placesList = dataResults
-    }
-    
-    func addMarkers(for places: [Place]) {
-        DispatchQueue.main.async {
-            for place in places {
-                self.addMarker(for: place)
-            }
-        }
-    }
-    
+// MARK: - MapPlacesViewProtocol -
+
+extension MapPlacesViewController: MapPlacesViewProtocol {
     func addMarker(for place: Place) {
         let latitude = place.location.latitude
         let longitude = place.location.longitude
@@ -212,53 +180,9 @@ private extension MapPlacesViewController {
         marker.snippet = address
         marker.map = mapView
     }
-    
-    func handleAuthorizationStatusDenied() {
-        let action = {
-            UIApplication.openAppSettings()
-        }
-        
-        let cancelAction = AlertButtonAction(
-            title: Constant.Alert.actionTitleCancel,
-            style: .cancel,
-            completion: nil
-        )
-        let settingsAction: AlertButtonAction = AlertButtonAction(
-            title: Constant.Alert.actionTitleSettings,
-            style: .default,
-            completion: action
-        )
-        
-        showAlert(
-            title: Constant.Alert.titleAuthorizationDenied,
-            message: Constant.Alert.messageAuthorizationDenied,
-            actions: [cancelAction, settingsAction]
-        )
-    }
-    
-    func showTryAgainAlert(
-        title: String = Constant.Alert.defaultTryAgainAlertTitle,
-        message: String,
-        action: @escaping EmptyBlock
-    ) {
-        let cancelButton = AlertButtonAction(
-            title: Constant.Alert.defaultCancelTitle,
-            style: .cancel,
-            completion: nil
-        )
-        let tryAgainButton = AlertButtonAction(
-            title: Constant.Alert.defaultTryAgainActionTitle,
-            style: .default,
-            completion: action
-        )
-        
-        showAlert(
-            title: title,
-            message: message,
-            actions: [cancelButton, tryAgainButton]
-        )
-    }
 }
+
+// MARK: - LocationServiceDelegate -
 
 extension MapPlacesViewController: LocationServiceDelegate {
     func didUpdateLocation(location: CLLocationCoordinate2D) {

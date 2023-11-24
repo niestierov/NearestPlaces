@@ -7,11 +7,18 @@
 
 import UIKit
 
-final class PlacesListViewController: UIViewController {
+protocol PlacesListViewProtocol: AnyObject { }
 
+final class PlacesListViewController: UIViewController {
+    static func instantiate(with presenter: PlacesListPresenterProtocol) -> PlacesListViewController {
+        let viewController = PlacesListViewController()
+        viewController.presenter = presenter
+        return viewController
+    }
+    
     // MARK: - Properties -
     
-    private var placesList: [Place] = []
+    private var presenter: PlacesListPresenterProtocol!
     
     // MARK: - UI Components -
     
@@ -31,17 +38,13 @@ final class PlacesListViewController: UIViewController {
         setupNavigationBar()
         setupTableView()
     }
-    
-    init(placesList: [Place]) {
-        self.placesList = placesList
-        
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
 }
+
+// MARK: - PlacesListViewProtocol -
+
+extension PlacesListViewController: PlacesListViewProtocol { }
+
+// MARK: - Private -
 
 private extension PlacesListViewController {
     func setupNavigationBar() {
@@ -64,12 +67,14 @@ private extension PlacesListViewController {
     }
 }
 
+// MARK: - UITableViewDataSource -
+
 extension PlacesListViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return placesList.count
+        return presenter.placesList.count
     }
     
     func tableView(
@@ -81,7 +86,9 @@ extension PlacesListViewController: UITableViewDataSource {
             at: indexPath
         )
         
-        cell.configure(place: placesList[indexPath.row])
+        let place = presenter.placesList[indexPath.row]
+        
+        cell.configure(place: place)
         
         return cell
     }

@@ -12,7 +12,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         guard let windowScene = (scene as? UIWindowScene) else {
             return
         }
@@ -24,13 +23,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        let mapPlacesViewController = MapPlacesViewController()
+        let mapPlacesPresenter = MapPlacesPresenter()
+        let mapPlacesViewController = MapPlacesViewController.instantiate(with: mapPlacesPresenter)
+        
+        mapPlacesPresenter.inject(view: mapPlacesViewController)
         
         let navigationController = UINavigationController(rootViewController: mapPlacesViewController)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
-    
 }
 
