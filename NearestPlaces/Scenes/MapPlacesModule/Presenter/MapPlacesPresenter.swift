@@ -48,7 +48,7 @@ final class MapPlacesPresenter: MapPlacesPresenterProtocol {
     
     func createPlacesListModule() -> PlacesListViewController {
         let placesListPresenter = PlacesListPresenter(placesList: placesList)
-        let viewController = PlacesListViewController.instantiate(with: placesListPresenter)
+        let viewController = PlacesListViewController(presenter: placesListPresenter)
         placesListPresenter.inject(view: viewController)
         
         return viewController

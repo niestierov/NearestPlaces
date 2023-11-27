@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         
         let mapPlacesPresenter = MapPlacesPresenter()
-        let mapPlacesViewController = MapPlacesViewController.instantiate(with: mapPlacesPresenter)
+        let mapPlacesViewController = MapPlacesViewController(presenter: mapPlacesPresenter)
         
         mapPlacesPresenter.inject(view: mapPlacesViewController)
         

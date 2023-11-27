@@ -20,12 +20,6 @@ protocol MapPlacesViewProtocol: AnyObject {
 }
 
 final class MapPlacesViewController: UIViewController {
-    static func instantiate(with presenter: MapPlacesPresenterProtocol) -> MapPlacesViewController {
-        let viewController = MapPlacesViewController()
-        viewController.presenter = presenter
-        return viewController
-    }
-    
     private enum Constant {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
@@ -90,6 +84,16 @@ final class MapPlacesViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         listPlacesButton.setRoundedCornerRadius()
+    }
+    
+    init(presenter: MapPlacesPresenterProtocol) {
+        self.presenter = presenter
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

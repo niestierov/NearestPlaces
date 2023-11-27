@@ -10,11 +10,6 @@ import UIKit
 protocol PlacesListViewProtocol: AnyObject { }
 
 final class PlacesListViewController: UIViewController {
-    static func instantiate(with presenter: PlacesListPresenterProtocol) -> PlacesListViewController {
-        let viewController = PlacesListViewController()
-        viewController.presenter = presenter
-        return viewController
-    }
     
     // MARK: - Properties -
     
@@ -37,6 +32,16 @@ final class PlacesListViewController: UIViewController {
 
         setupNavigationBar()
         setupTableView()
+    }
+    
+    init(presenter: PlacesListPresenterProtocol) {
+        self.presenter = presenter
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
