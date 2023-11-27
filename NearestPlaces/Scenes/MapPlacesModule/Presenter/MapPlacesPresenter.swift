@@ -11,10 +11,11 @@ import CoreLocation
 protocol MapPlacesPresenter {
     func performInitialSetup()
     func fetchPlaces(location: CLLocationCoordinate2D)
+    func updatePlacesList(with places: [Place])
     func navigateToPlacesList()
 }
 
-final class MapPlacesPresenterImpl: MapPlacesPresenter {
+final class DefaultMapPlacesPresenter: MapPlacesPresenter {
     private enum Constant {
         static let defaultZoom: Float = 12
         static let alertUnknownErrorMessage = "It seems like there's been an unknown error. You can try to download the data again."
@@ -42,7 +43,7 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
     
     // MARK: - Internal -
     
-    func inject(view: MapPlacesView) {
+    func setView(_ view: MapPlacesView) {
         self.view = view
     }
     
@@ -70,19 +71,23 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
             
             switch response {
             case .success(let data):
-                self.handleSuccessRequest(data: data)
+                self.view?.handleSuccessRequest(data: data)
             case .failure(let error):
                 self.view?.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
-                    self?.locationService.verifyLocationPermissions()
+                    self?.fetchPlaces(location: location)
                 }
             }
         }
+    }
+    
+    func updatePlacesList(with places: [Place]) {
+        placesList = places
     }
 }
 
 // MARK: - Private -
 
-private extension MapPlacesPresenterImpl {
+private extension DefaultMapPlacesPresenter {
     func setupLocationService() {
         locationService.delegate = self
         
@@ -97,22 +102,11 @@ private extension MapPlacesPresenterImpl {
             }
         }
     }
-    
-    func handleSuccessRequest(data: NearbySearchResponse?) {
-        guard let data,
-              let dataResults = data.places else {
-            return
-        }
-
-        view?.update(with: dataResults)
-        
-        placesList = dataResults
-    }
 }
 
 // MARK: - LocationServiceDelegate -
 
-extension MapPlacesPresenterImpl: LocationServiceDelegate {
+extension DefaultMapPlacesPresenter: LocationServiceDelegate {
     func didUpdateLocation(location: CLLocationCoordinate2D) {
         self.view?.updateMap(location: location, zoom: Constant.defaultZoom)
     }

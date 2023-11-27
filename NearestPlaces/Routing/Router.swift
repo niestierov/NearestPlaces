@@ -30,21 +30,21 @@ final class MainRouter: Router {
         let networkService = NetworkService()
         let locationService = LocationService()
         
-        let presenter = MapPlacesPresenterImpl(
+        let presenter = DefaultMapPlacesPresenter(
             router: self,
             networkService: networkService,
             locationService: locationService
         )
         let viewController = MapPlacesViewController(presenter: presenter)
-        presenter.inject(view: viewController)
+        presenter.setView(viewController)
         
         navigationController.setViewControllers([viewController], animated: true)
     }
     
     func showPlacesListModule(with placesList: [Place]) {
-        let presenter = PlacesListPresenterImpl(router: self, placesList: placesList)
+        let presenter = DefaultPlacesListPresenter(router: self, placesList: placesList)
         let viewController = PlacesListViewController(presenter: presenter)
-        presenter.inject(view: viewController)
+        presenter.setView(viewController)
         
         navigationController.pushViewController(viewController, animated: true)
     }

@@ -11,7 +11,7 @@ protocol PlacesListPresenter {
     var placesList: [Place] { get }
 }
 
-final class PlacesListPresenterImpl: PlacesListPresenter {
+final class DefaultPlacesListPresenter: PlacesListPresenter {
     
     // MARK: - Properties -
     
@@ -28,7 +28,7 @@ final class PlacesListPresenterImpl: PlacesListPresenter {
     
     // MARK: - Internal -
     
-    func inject(view: PlacesListView) {
+    func setView(_ view: PlacesListView) {
         self.view = view
     }
 }

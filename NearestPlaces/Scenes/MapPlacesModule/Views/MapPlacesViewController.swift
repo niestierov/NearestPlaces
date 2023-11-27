@@ -11,7 +11,7 @@ import GoogleMaps
 protocol MapPlacesView: AnyObject {
     func updateMap(location: CLLocationCoordinate2D, zoom: Float)
     func update(with places: [Place])
-    func addMarker(for place: Place)
+    func handleSuccessRequest(data: NearbySearchResponse?)
     func handleAuthorizationStatusDenied()
     func showTryAgainAlert(
         message: String,
@@ -146,11 +146,7 @@ private extension MapPlacesViewController {
     @objc func showPlacesList() {
         presenter.navigateToPlacesList()
     }
-}
-
-// MARK: - MapPlacesViewProtocol -
-
-extension MapPlacesViewController: MapPlacesView {
+    
     func addMarker(for place: Place) {
         let latitude = place.location.latitude
         let longitude = place.location.longitude
@@ -165,7 +161,11 @@ extension MapPlacesViewController: MapPlacesView {
         marker.snippet = address
         marker.map = mapView
     }
-    
+}
+
+// MARK: - MapPlacesViewProtocol -
+
+extension MapPlacesViewController: MapPlacesView {
     func updateMap(location: CLLocationCoordinate2D, zoom: Float) {
         let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
         mapView.camera = camera
@@ -179,6 +179,17 @@ extension MapPlacesViewController: MapPlacesView {
                 self.addMarker(for: place)
             }
         }
+    }
+    
+    func handleSuccessRequest(data: NearbySearchResponse?) {
+        guard let data,
+              let dataResults = data.places else {
+            return
+        }
+
+        update(with: dataResults)
+        
+        presenter.updatePlacesList(with: dataResults)
     }
     
     func handleAuthorizationStatusDenied() {
