@@ -9,31 +9,27 @@ import UIKit
 
 protocol Router: AnyObject {
     func showMapPlacesModule()
-    func showPlacesListModule(placesList: [Place])
+    func showPlacesListModule(with placesList: [Place])
 }
 
-class RouterImpl: Router {
+final class MainRouter: Router {
     
     // MARK: - Properties -
     
     private let navigationController: UINavigationController
-    private let networkService: NetworkService
-    private let locationService: LocationService
     
     // MARK: - Life Cycle -
-    required init(
-        navigationController: UINavigationController,
-        networkService: NetworkService,
-        locationService: LocationService
-    ) {
+    
+    required init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.networkService = networkService
-        self.locationService = locationService
     }
     
     // MARK: - Internal -
     
     func showMapPlacesModule() {
+        let networkService = NetworkService()
+        let locationService = LocationService()
+        
         let presenter = MapPlacesPresenterImpl(
             router: self,
             networkService: networkService,
@@ -45,7 +41,7 @@ class RouterImpl: Router {
         navigationController.setViewControllers([viewController], animated: true)
     }
     
-    func showPlacesListModule(placesList: [Place]) {
+    func showPlacesListModule(with placesList: [Place]) {
         let presenter = PlacesListPresenterImpl(router: self, placesList: placesList)
         let viewController = PlacesListViewController(presenter: presenter)
         presenter.inject(view: viewController)

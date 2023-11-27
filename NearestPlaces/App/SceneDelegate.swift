@@ -23,16 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        
         let navigationController = UINavigationController()
-        let networkService = NetworkService()
-        let locationService = LocationService()
-        
-        let router = RouterImpl(
-            navigationController: navigationController,
-            networkService: networkService,
-            locationService: locationService
-        )
+
+        let router = MainRouter(navigationController: navigationController)
         
         router.showMapPlacesModule()
         

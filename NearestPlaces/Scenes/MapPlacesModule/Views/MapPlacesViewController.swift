@@ -9,12 +9,13 @@ import UIKit
 import GoogleMaps
 
 protocol MapPlacesView: AnyObject {
-    func setLocationServiceDelegate(for locationService: LocationService)
+    func updateMap(location: CLLocationCoordinate2D, zoom: Float)
+    func update(with places: [Place])
     func addMarker(for place: Place)
-    func showAlert(
-        title: String,
+    func handleAuthorizationStatusDenied()
+    func showTryAgainAlert(
         message: String,
-        actions: [AlertButtonAction]
+        action: @escaping EmptyBlock
     )
 }
 
@@ -22,7 +23,6 @@ final class MapPlacesViewController: UIViewController {
     private enum Constant {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
-        static let defaultZoom: Float = 12
         
         enum ListPlacesButton {
             static let shadowOpacity: Float = 0.3
@@ -30,6 +30,16 @@ final class MapPlacesViewController: UIViewController {
             static let width: CGFloat = 56
             static let image = "list.clipboard"
             static let shadowOffset = CGSize(width: 0, height: 2)
+        }
+        
+        enum Alert {
+            static let actionTitleCancel = "Cancel"
+            static let actionTitleSettings = "Open Settings"
+            static let titleAuthorizationDenied = "Location Services Disabled"
+            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
+            static let defaultTryAgainAlertTitle = "Error"
+            static let defaultTryAgainActionTitle = "Try Again"
+            static let defaultCancelTitle = "Cancel"
         }
     }
     
@@ -74,7 +84,7 @@ final class MapPlacesViewController: UIViewController {
         setupNavigationBar()
         setupMapView()
         setupListPlacesButton()
-        presenter.setupLocationService()
+        presenter.performInitialSetup()
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,17 +144,7 @@ private extension MapPlacesViewController {
     }
     
     @objc func showPlacesList() {
-        presenter.placesListButtonTapped()
-    }
-    
-    func updateMap(
-        location: CLLocationCoordinate2D,
-        zoom: Float = Constant.defaultZoom
-    ) {
-        let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
-        mapView.camera = camera
-        
-        presenter.fetchPlaces(location: location)
+        presenter.navigateToPlacesList()
     }
 }
 
@@ -166,15 +166,63 @@ extension MapPlacesViewController: MapPlacesView {
         marker.map = mapView
     }
     
-    func setLocationServiceDelegate(for locationService: LocationService) {
-        locationService.delegate = self
+    func updateMap(location: CLLocationCoordinate2D, zoom: Float) {
+        let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
+        mapView.camera = camera
+        
+        presenter.fetchPlaces(location: location)
     }
-}
-
-// MARK: - LocationServiceDelegate -
-
-extension MapPlacesViewController: LocationServiceDelegate {
-    func didUpdateLocation(location: CLLocationCoordinate2D) {
-        updateMap(location: location)
+    
+    func update(with places: [Place]) {
+        DispatchQueue.main.async {
+            for place in places {
+                self.addMarker(for: place)
+            }
+        }
+    }
+    
+    func handleAuthorizationStatusDenied() {
+        let action = {
+            UIApplication.openAppSettings()
+        }
+        
+        let cancelAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleCancel,
+            style: .cancel,
+            completion: nil
+        )
+        let settingsAction: AlertButtonAction = AlertButtonAction(
+            title: Constant.Alert.actionTitleSettings,
+            style: .default,
+            completion: action
+        )
+        
+        showAlert(
+            title: Constant.Alert.titleAuthorizationDenied,
+            message: Constant.Alert.messageAuthorizationDenied,
+            actions: [cancelAction, settingsAction]
+        )
+    }
+    
+    func showTryAgainAlert(
+        message: String,
+        action: @escaping EmptyBlock
+    ) {
+        let cancelButton = AlertButtonAction(
+            title: Constant.Alert.defaultCancelTitle,
+            style: .cancel,
+            completion: nil
+        )
+        let tryAgainButton = AlertButtonAction(
+            title: Constant.Alert.defaultTryAgainActionTitle,
+            style: .default,
+            completion: action
+        )
+        
+        showAlert(
+            title: Constant.Alert.defaultTryAgainAlertTitle,
+            message: message,
+            actions: [cancelButton, tryAgainButton]
+        )
     }
 }

@@ -9,30 +9,15 @@ import UIKit
 import CoreLocation
 
 protocol MapPlacesPresenter {
-    var placesList: [Place] { get }
-    
+    func performInitialSetup()
     func fetchPlaces(location: CLLocationCoordinate2D)
-    func handleAuthorizationStatusDenied()
-    func createTryAgainAlert(
-        message: String,
-        action: @escaping EmptyBlock
-    )
-    func placesListButtonTapped()
-    func setupLocationService()
+    func navigateToPlacesList()
 }
 
 final class MapPlacesPresenterImpl: MapPlacesPresenter {
     private enum Constant {
-        enum Alert {
-            static let actionTitleCancel = "Cancel"
-            static let actionTitleSettings = "Open Settings"
-            static let titleAuthorizationDenied = "Location Services Disabled"
-            static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
-            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
-            static let defaultTryAgainAlertTitle = "Error"
-            static let defaultTryAgainActionTitle = "Try Again"
-            static let defaultCancelTitle = "Cancel"
-        }
+        static let defaultZoom: Float = 12
+        static let alertUnknownErrorMessage = "It seems like there's been an unknown error. You can try to download the data again."
     }
     
     // MARK: - Properties -
@@ -61,68 +46,12 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
         self.view = view
     }
     
-    func setupLocationService() {
-        view?.setLocationServiceDelegate(for: locationService)
-        
-        locationService.verifyLocationPermissions()
-        
-        locationService.handleAuthorizationDenied = { [weak self] in
-            self?.handleAuthorizationStatusDenied()
-        }
-        locationService.handleAuthorizationUnknown = { [weak self] in
-            self?.createTryAgainAlert(message: Constant.Alert.messageUnknownError) {
-                self?.locationService.verifyLocationPermissions()
-            }
-        }
+    func performInitialSetup() {
+        setupLocationService()
     }
     
-    func placesListButtonTapped() {
-        router.showPlacesListModule(placesList: placesList)
-    }
-    
-    func handleAuthorizationStatusDenied() {
-        let action = {
-            UIApplication.openAppSettings()
-        }
-        
-        let cancelAction = AlertButtonAction(
-            title: Constant.Alert.actionTitleCancel,
-            style: .cancel,
-            completion: nil
-        )
-        let settingsAction: AlertButtonAction = AlertButtonAction(
-            title: Constant.Alert.actionTitleSettings,
-            style: .default,
-            completion: action
-        )
-        
-        view?.showAlert(
-            title: Constant.Alert.titleAuthorizationDenied,
-            message: Constant.Alert.messageAuthorizationDenied,
-            actions: [cancelAction, settingsAction]
-        )
-    }
-    
-    func createTryAgainAlert(
-        message: String,
-        action: @escaping EmptyBlock
-    ) {
-        let cancelButton = AlertButtonAction(
-            title: Constant.Alert.defaultCancelTitle,
-            style: .cancel,
-            completion: nil
-        )
-        let tryAgainButton = AlertButtonAction(
-            title: Constant.Alert.defaultTryAgainActionTitle,
-            style: .default,
-            completion: action
-        )
-        
-        view?.showAlert(
-            title: Constant.Alert.defaultTryAgainAlertTitle,
-            message: message,
-            actions: [cancelButton, tryAgainButton]
-        )
+    func navigateToPlacesList() {
+        router.showPlacesListModule(with: placesList)
     }
     
     func fetchPlaces(location: CLLocationCoordinate2D) {
@@ -143,7 +72,7 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
             case .success(let data):
                 self.handleSuccessRequest(data: data)
             case .failure(let error):
-                self.createTryAgainAlert(message: error.localizedDescription) { [weak self] in
+                self.view?.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
                     self?.locationService.verifyLocationPermissions()
                 }
             }
@@ -154,22 +83,37 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
 // MARK: - Private -
 
 private extension MapPlacesPresenterImpl {
+    func setupLocationService() {
+        locationService.delegate = self
+        
+        locationService.verifyLocationPermissions()
+        
+        locationService.handleAuthorizationDenied = { [weak self] in
+            self?.view?.handleAuthorizationStatusDenied()
+        }
+        locationService.handleAuthorizationUnknown = { [weak self] in
+            self?.view?.showTryAgainAlert(message: Constant.alertUnknownErrorMessage) {
+                self?.locationService.verifyLocationPermissions()
+            }
+        }
+    }
+    
     func handleSuccessRequest(data: NearbySearchResponse?) {
-        guard let safeData = data,
-              let dataResults = safeData.places else {
+        guard let data,
+              let dataResults = data.places else {
             return
         }
 
-        addMarkers(for: dataResults)
+        view?.update(with: dataResults)
         
         placesList = dataResults
     }
-    
-    func addMarkers(for places: [Place]) {
-        DispatchQueue.main.async {
-            for place in places {
-                self.view?.addMarker(for: place)
-            }
-        }
+}
+
+// MARK: - LocationServiceDelegate -
+
+extension MapPlacesPresenterImpl: LocationServiceDelegate {
+    func didUpdateLocation(location: CLLocationCoordinate2D) {
+        self.view?.updateMap(location: location, zoom: Constant.defaultZoom)
     }
 }
