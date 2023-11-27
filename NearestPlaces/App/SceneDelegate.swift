@@ -23,12 +23,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        let mapPlacesPresenter = MapPlacesPresenter()
-        let mapPlacesViewController = MapPlacesViewController(presenter: mapPlacesPresenter)
         
-        mapPlacesPresenter.inject(view: mapPlacesViewController)
+        let navigationController = UINavigationController()
+        let networkService = NetworkService()
+        let locationService = LocationService()
         
-        let navigationController = UINavigationController(rootViewController: mapPlacesViewController)
+        let router = RouterImpl(
+            navigationController: navigationController,
+            networkService: networkService,
+            locationService: locationService
+        )
+        
+        router.showMapPlacesModule()
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

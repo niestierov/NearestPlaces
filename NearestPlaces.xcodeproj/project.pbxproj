@@ -11,6 +11,7 @@
 		9A0869402B0BBB38009EA75F /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08693F2B0BBB38009EA75F /* UIImageView+Extension.swift */; };
 		9A0A40B82B079FA600BF9832 /* StringIdentifiable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40B72B079FA600BF9832 /* StringIdentifiable+Extension.swift */; };
 		9A0A40BB2B07A08E00BF9832 /* UITableView + Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */; };
+		9A11F0A22B149B9A007F4013 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A11F0A12B149B9A007F4013 /* Router.swift */; };
 		9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */; };
 		9A2A7CBC2B0B8E680027CCF2 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A7CBB2B0B8E680027CCF2 /* UIView+Extension.swift */; };
 		9A2A7CBE2B0B9F990027CCF2 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A7CBD2B0B9F990027CCF2 /* Double+Extension.swift */; };
@@ -40,6 +41,7 @@
 		9A08693F2B0BBB38009EA75F /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		9A0A40B72B079FA600BF9832 /* StringIdentifiable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringIdentifiable+Extension.swift"; sourceTree = "<group>"; };
 		9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + Reusable.swift"; sourceTree = "<group>"; };
+		9A11F0A12B149B9A007F4013 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		9A2A7CBB2B0B8E680027CCF2 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		9A2A7CBD2B0B9F990027CCF2 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
@@ -92,6 +94,14 @@
 				6BA3C5FC8DB27D5F0CBBA5E2 /* Pods_NearestPlaces.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A11F0A02B149B83007F4013 /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				9A11F0A12B149B9A007F4013 /* Router.swift */,
+			);
+			path = Routing;
 			sourceTree = "<group>";
 		};
 		9A2A7CBF2B0B9FCE0027CCF2 /* ImageService */ = {
@@ -255,6 +265,7 @@
 				9A2D56A12AFCDCF5002A2A37 /* Scenes */,
 				9AFB96182B0E3F2A008BC6D1 /* Services */,
 				9A2D56B52AFCEFC7002A2A37 /* Network */,
+				9A11F0A02B149B83007F4013 /* Routing */,
 				9A2D56B02AFCE5AA002A2A37 /* Extensions */,
 				9A2D56A32AFCDCFE002A2A37 /* Supporting */,
 				9AE39FE32AF9114600B24002 /* Info.plist */,
@@ -420,6 +431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A11F0A22B149B9A007F4013 /* Router.swift in Sources */,
 				9A2D56B22AFCE5C1002A2A37 /* AppConstant.swift in Sources */,
 				9A806D652B067DED00439893 /* PlaceListTableViewCell.swift in Sources */,
 				9A2A7CBC2B0B8E680027CCF2 /* UIView+Extension.swift in Sources */,

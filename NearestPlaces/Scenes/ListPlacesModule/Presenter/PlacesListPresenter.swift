@@ -7,26 +7,28 @@
 
 import Foundation
 
-protocol PlacesListPresenterProtocol {
+protocol PlacesListPresenter {
     var placesList: [Place] { get }
 }
 
-final class PlacesListPresenter: PlacesListPresenterProtocol {
+final class PlacesListPresenterImpl: PlacesListPresenter {
     
     // MARK: - Properties -
     
-    private weak var view: PlacesListViewProtocol?
+    private let router: Router
+    private weak var view: PlacesListView?
     private(set) var placesList: [Place] = []
     
     //MARK: - Life Cycle -
     
-    required init(placesList: [Place]) {
+    required init(router: Router, placesList: [Place]) {
+        self.router = router
         self.placesList = placesList
     }
     
     // MARK: - Internal -
     
-    func inject(view: PlacesListViewProtocol) {
+    func inject(view: PlacesListView) {
         self.view = view
     }
 }

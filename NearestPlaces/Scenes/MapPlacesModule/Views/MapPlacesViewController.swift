@@ -8,7 +8,7 @@
 import UIKit
 import GoogleMaps
 
-protocol MapPlacesViewProtocol: AnyObject {
+protocol MapPlacesView: AnyObject {
     var locationService: LocationService { get }
     
     func addMarker(for place: Place)
@@ -37,8 +37,8 @@ final class MapPlacesViewController: UIViewController {
     
     // MARK: - Properties -
     
-    private var presenter: MapPlacesPresenterProtocol!
-    private(set) var locationService = LocationService()
+    private let presenter: MapPlacesPresenter!
+    private(set) var locationService: LocationService
     
     // MARK: - UI Components -
     
@@ -86,8 +86,9 @@ final class MapPlacesViewController: UIViewController {
         listPlacesButton.setRoundedCornerRadius()
     }
     
-    init(presenter: MapPlacesPresenterProtocol) {
+    init(presenter: MapPlacesPresenter, locationService: LocationService) {
         self.presenter = presenter
+        self.locationService = locationService
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -152,8 +153,7 @@ private extension MapPlacesViewController {
     }
     
     @objc func showPlacesList() {
-        let viewController = presenter.createPlacesListModule()
-        navigationController?.pushViewController(viewController, animated: true)
+        presenter.placesListButtonTapped()
     }
     
     func updateMap(
@@ -169,7 +169,7 @@ private extension MapPlacesViewController {
 
 // MARK: - MapPlacesViewProtocol -
 
-extension MapPlacesViewController: MapPlacesViewProtocol {
+extension MapPlacesViewController: MapPlacesView {
     func addMarker(for place: Place) {
         let latitude = place.location.latitude
         let longitude = place.location.longitude

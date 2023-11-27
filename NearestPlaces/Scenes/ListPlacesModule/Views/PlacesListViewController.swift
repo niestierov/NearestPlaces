@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol PlacesListViewProtocol: AnyObject { }
+protocol PlacesListView: AnyObject { }
 
 final class PlacesListViewController: UIViewController {
     
     // MARK: - Properties -
     
-    private var presenter: PlacesListPresenterProtocol!
+    private let presenter: PlacesListPresenter!
     
     // MARK: - UI Components -
     
@@ -34,7 +34,7 @@ final class PlacesListViewController: UIViewController {
         setupTableView()
     }
     
-    init(presenter: PlacesListPresenterProtocol) {
+    init(presenter: PlacesListPresenter) {
         self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
@@ -47,7 +47,7 @@ final class PlacesListViewController: UIViewController {
 
 // MARK: - PlacesListViewProtocol -
 
-extension PlacesListViewController: PlacesListViewProtocol { }
+extension PlacesListViewController: PlacesListView { }
 
 // MARK: - Private -
 

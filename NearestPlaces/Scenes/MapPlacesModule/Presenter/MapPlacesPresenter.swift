@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-protocol MapPlacesPresenterProtocol {
+protocol MapPlacesPresenter {
     var placesList: [Place] { get }
     
     func fetchPlaces(location: CLLocationCoordinate2D)
@@ -17,10 +17,10 @@ protocol MapPlacesPresenterProtocol {
         message: String,
         action: @escaping EmptyBlock
     )
-    func createPlacesListModule() -> PlacesListViewController
+    func placesListButtonTapped()
 }
 
-final class MapPlacesPresenter: MapPlacesPresenterProtocol {
+final class MapPlacesPresenterImpl: MapPlacesPresenter {
     private enum Constant {
         enum Alert {
             static let actionTitleCancel = "Cancel"
@@ -36,22 +36,26 @@ final class MapPlacesPresenter: MapPlacesPresenterProtocol {
     
     // MARK: - Properties -
     
-    private weak var view: MapPlacesViewProtocol?
-    private let networkService = NetworkService()
+    private weak var view: MapPlacesView?
+    private let router: Router
+    private let networkService: NetworkService
     private(set) var placesList: [Place] = []
+    
+    // MARK: - Life Cycle -
+    
+    required init(router: Router, networkService: NetworkService) {
+        self.router = router
+        self.networkService = networkService
+    }
     
     // MARK: - Internal -
     
-    func inject(view: MapPlacesViewProtocol) {
+    func inject(view: MapPlacesView) {
         self.view = view
     }
     
-    func createPlacesListModule() -> PlacesListViewController {
-        let placesListPresenter = PlacesListPresenter(placesList: placesList)
-        let viewController = PlacesListViewController(presenter: placesListPresenter)
-        placesListPresenter.inject(view: viewController)
-        
-        return viewController
+    func placesListButtonTapped() {
+        router.showPlacesListModule(placesList: placesList)
     }
     
     func handleAuthorizationStatusDenied() {
@@ -127,7 +131,7 @@ final class MapPlacesPresenter: MapPlacesPresenterProtocol {
 
 // MARK: - Private -
 
-private extension MapPlacesPresenter {
+private extension MapPlacesPresenterImpl {
     func handleSuccessRequest(data: NearbySearchResponse?) {
         guard let safeData = data,
               let dataResults = safeData.places else {
