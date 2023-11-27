@@ -9,8 +9,7 @@ import UIKit
 import GoogleMaps
 
 protocol MapPlacesView: AnyObject {
-    var locationService: LocationService { get }
-    
+    func setLocationServiceDelegate(for locationService: LocationService)
     func addMarker(for place: Place)
     func showAlert(
         title: String,
@@ -24,7 +23,6 @@ final class MapPlacesViewController: UIViewController {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
         static let defaultZoom: Float = 12
-        static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
         
         enum ListPlacesButton {
             static let shadowOpacity: Float = 0.3
@@ -38,7 +36,6 @@ final class MapPlacesViewController: UIViewController {
     // MARK: - Properties -
     
     private let presenter: MapPlacesPresenter!
-    private(set) var locationService: LocationService
     
     // MARK: - UI Components -
     
@@ -77,7 +74,7 @@ final class MapPlacesViewController: UIViewController {
         setupNavigationBar()
         setupMapView()
         setupListPlacesButton()
-        setupLocationService()
+        presenter.setupLocationService()
     }
     
     override func viewDidLayoutSubviews() {
@@ -86,9 +83,8 @@ final class MapPlacesViewController: UIViewController {
         listPlacesButton.setRoundedCornerRadius()
     }
     
-    init(presenter: MapPlacesPresenter, locationService: LocationService) {
+    init(presenter: MapPlacesPresenter) {
         self.presenter = presenter
-        self.locationService = locationService
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -103,21 +99,6 @@ final class MapPlacesViewController: UIViewController {
 private extension MapPlacesViewController {
     func setupNavigationBar() {
         navigationController?.isNavigationBarHidden = true
-    }
-    
-    func setupLocationService() {
-        locationService.delegate = self
-        
-        locationService.verifyLocationPermissions()
-        
-        locationService.handleAuthorizationDenied = { [weak self] in
-            self?.presenter.handleAuthorizationStatusDenied()
-        }
-        locationService.handleAuthorizationUnknown = { [weak self] in
-            self?.presenter.createTryAgainAlert(message: Constant.messageUnknownError) {
-                self?.locationService.verifyLocationPermissions()
-            }
-        }
     }
     
     func setupMapView() {
@@ -183,6 +164,10 @@ extension MapPlacesViewController: MapPlacesView {
         marker.title = name
         marker.snippet = address
         marker.map = mapView
+    }
+    
+    func setLocationServiceDelegate(for locationService: LocationService) {
+        locationService.delegate = self
     }
 }
 

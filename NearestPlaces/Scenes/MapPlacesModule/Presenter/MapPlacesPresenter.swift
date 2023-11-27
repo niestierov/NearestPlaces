@@ -18,6 +18,7 @@ protocol MapPlacesPresenter {
         action: @escaping EmptyBlock
     )
     func placesListButtonTapped()
+    func setupLocationService()
 }
 
 final class MapPlacesPresenterImpl: MapPlacesPresenter {
@@ -39,19 +40,40 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
     private weak var view: MapPlacesView?
     private let router: Router
     private let networkService: NetworkService
+    private let locationService: LocationService
     private(set) var placesList: [Place] = []
     
     // MARK: - Life Cycle -
     
-    required init(router: Router, networkService: NetworkService) {
+    required init(
+        router: Router,
+        networkService: NetworkService,
+        locationService: LocationService
+    ) {
         self.router = router
         self.networkService = networkService
+        self.locationService = locationService
     }
     
     // MARK: - Internal -
     
     func inject(view: MapPlacesView) {
         self.view = view
+    }
+    
+    func setupLocationService() {
+        view?.setLocationServiceDelegate(for: locationService)
+        
+        locationService.verifyLocationPermissions()
+        
+        locationService.handleAuthorizationDenied = { [weak self] in
+            self?.handleAuthorizationStatusDenied()
+        }
+        locationService.handleAuthorizationUnknown = { [weak self] in
+            self?.createTryAgainAlert(message: Constant.Alert.messageUnknownError) {
+                self?.locationService.verifyLocationPermissions()
+            }
+        }
     }
     
     func placesListButtonTapped() {
@@ -122,7 +144,7 @@ final class MapPlacesPresenterImpl: MapPlacesPresenter {
                 self.handleSuccessRequest(data: data)
             case .failure(let error):
                 self.createTryAgainAlert(message: error.localizedDescription) { [weak self] in
-                    self?.view?.locationService.verifyLocationPermissions()
+                    self?.locationService.verifyLocationPermissions()
                 }
             }
         }

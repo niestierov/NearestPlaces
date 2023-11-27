@@ -16,7 +16,7 @@ class RouterImpl: Router {
     
     // MARK: - Properties -
     
-    private let navigationController: UINavigationController?
+    private let navigationController: UINavigationController
     private let networkService: NetworkService
     private let locationService: LocationService
     
@@ -34,11 +34,15 @@ class RouterImpl: Router {
     // MARK: - Internal -
     
     func showMapPlacesModule() {
-        let presenter = MapPlacesPresenterImpl(router: self, networkService: networkService)
-        let viewController = MapPlacesViewController(presenter: presenter, locationService: locationService)
+        let presenter = MapPlacesPresenterImpl(
+            router: self,
+            networkService: networkService,
+            locationService: locationService
+        )
+        let viewController = MapPlacesViewController(presenter: presenter)
         presenter.inject(view: viewController)
         
-        navigationController?.setViewControllers([viewController], animated: true)
+        navigationController.setViewControllers([viewController], animated: true)
     }
     
     func showPlacesListModule(placesList: [Place]) {
@@ -46,6 +50,6 @@ class RouterImpl: Router {
         let viewController = PlacesListViewController(presenter: presenter)
         presenter.inject(view: viewController)
         
-        navigationController?.pushViewController(viewController, animated: true)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
