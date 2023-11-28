@@ -49,6 +49,10 @@ final class LocationService: NSObject {
             handleAuthorizationUnknown?()
         }
     }
+    
+    func stopLocationUpdate() {
+        locationManager.stopUpdatingLocation()
+    }
 }
 
 private extension LocationService {

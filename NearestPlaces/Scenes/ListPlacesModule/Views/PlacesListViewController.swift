@@ -79,7 +79,7 @@ extension PlacesListViewController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return presenter.placesList.count
+        return presenter.numberOfPlaces()
     }
     
     func tableView(
@@ -91,7 +91,7 @@ extension PlacesListViewController: UITableViewDataSource {
             at: indexPath
         )
         
-        let place = presenter.placesList[indexPath.row]
+        let place = presenter.place(at: indexPath.row)
         
         cell.configure(place: place)
         

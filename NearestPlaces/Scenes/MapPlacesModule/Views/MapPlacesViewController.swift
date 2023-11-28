@@ -9,10 +9,9 @@ import UIKit
 import GoogleMaps
 
 protocol MapPlacesView: AnyObject {
-    func updateMap(location: CLLocationCoordinate2D, zoom: Float)
+    func updateMap(location: CLLocationCoordinate2D)
     func update(with places: [Place])
-    func handleSuccessRequest(data: NearbySearchResponse?)
-    func handleAuthorizationStatusDenied()
+    func showAuthorizationDeniedAlert()
     func showTryAgainAlert(
         message: String,
         action: @escaping EmptyBlock
@@ -23,6 +22,7 @@ final class MapPlacesViewController: UIViewController {
     private enum Constant {
         static let defaultVerticalInset: CGFloat = 75
         static let defaultHorizontalInset: CGFloat = 10
+        static let defaultZoom: Float = 8
         
         enum ListPlacesButton {
             static let shadowOpacity: Float = 0.3
@@ -40,6 +40,7 @@ final class MapPlacesViewController: UIViewController {
             static let defaultTryAgainAlertTitle = "Error"
             static let defaultTryAgainActionTitle = "Try Again"
             static let defaultCancelTitle = "Cancel"
+            static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
         }
     }
     
@@ -166,11 +167,13 @@ private extension MapPlacesViewController {
 // MARK: - MapPlacesViewProtocol -
 
 extension MapPlacesViewController: MapPlacesView {
-    func updateMap(location: CLLocationCoordinate2D, zoom: Float) {
-        let camera = GMSCameraPosition.camera(withTarget: location, zoom: zoom)
-        mapView.camera = camera
+    func updateMap(location: CLLocationCoordinate2D) {
+        let camera = GMSCameraPosition.camera(
+            withTarget: location,
+            zoom: Constant.defaultZoom
+        )
         
-        presenter.fetchPlaces(location: location)
+        mapView.animate(to: camera)
     }
     
     func update(with places: [Place]) {
@@ -181,18 +184,7 @@ extension MapPlacesViewController: MapPlacesView {
         }
     }
     
-    func handleSuccessRequest(data: NearbySearchResponse?) {
-        guard let data,
-              let dataResults = data.places else {
-            return
-        }
-
-        update(with: dataResults)
-        
-        presenter.updatePlacesList(with: dataResults)
-    }
-    
-    func handleAuthorizationStatusDenied() {
+    func showAuthorizationDeniedAlert() {
         let action = {
             UIApplication.openAppSettings()
         }

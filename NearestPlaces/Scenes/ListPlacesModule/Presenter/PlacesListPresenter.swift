@@ -8,7 +8,8 @@
 import Foundation
 
 protocol PlacesListPresenter {
-    var placesList: [Place] { get }
+    func place(at index: Int) -> Place
+    func numberOfPlaces() -> Int
 }
 
 final class DefaultPlacesListPresenter: PlacesListPresenter {
@@ -30,5 +31,13 @@ final class DefaultPlacesListPresenter: PlacesListPresenter {
     
     func setView(_ view: PlacesListView) {
         self.view = view
+    }
+    
+    func place(at index: Int) -> Place {
+        placesList[index]
+    }
+    
+    func numberOfPlaces() -> Int {
+        placesList.count
     }
 }

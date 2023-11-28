@@ -10,14 +10,11 @@ import CoreLocation
 
 protocol MapPlacesPresenter {
     func performInitialSetup()
-    func fetchPlaces(location: CLLocationCoordinate2D)
-    func updatePlacesList(with places: [Place])
     func navigateToPlacesList()
 }
 
 final class DefaultMapPlacesPresenter: MapPlacesPresenter {
     private enum Constant {
-        static let defaultZoom: Float = 12
         static let alertUnknownErrorMessage = "It seems like there's been an unknown error. You can try to download the data again."
     }
     
@@ -71,17 +68,11 @@ final class DefaultMapPlacesPresenter: MapPlacesPresenter {
             
             switch response {
             case .success(let data):
-                self.view?.handleSuccessRequest(data: data)
+                handleSuccessRequest(data: data)
             case .failure(let error):
-                self.view?.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
-                    self?.fetchPlaces(location: location)
-                }
+                handleFailureRequest(with: error, location: location)
             }
         }
-    }
-    
-    func updatePlacesList(with places: [Place]) {
-        placesList = places
     }
 }
 
@@ -94,12 +85,31 @@ private extension DefaultMapPlacesPresenter {
         locationService.verifyLocationPermissions()
         
         locationService.handleAuthorizationDenied = { [weak self] in
-            self?.view?.handleAuthorizationStatusDenied()
+            self?.view?.showAuthorizationDeniedAlert()
         }
         locationService.handleAuthorizationUnknown = { [weak self] in
             self?.view?.showTryAgainAlert(message: Constant.alertUnknownErrorMessage) {
                 self?.locationService.verifyLocationPermissions()
             }
+        }
+    }
+    
+    func handleSuccessRequest(data: NearbySearchResponse?) {
+        guard let data,
+              let dataResults = data.places else {
+            return
+        }
+        
+        view?.update(with: dataResults)
+        
+        placesList = dataResults
+        
+        locationService.stopLocationUpdate()
+    }
+    
+    func handleFailureRequest(with error: Error, location: CLLocationCoordinate2D) {
+        self.view?.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
+            self?.fetchPlaces(location: location)
         }
     }
 }
@@ -108,6 +118,8 @@ private extension DefaultMapPlacesPresenter {
 
 extension DefaultMapPlacesPresenter: LocationServiceDelegate {
     func didUpdateLocation(location: CLLocationCoordinate2D) {
-        self.view?.updateMap(location: location, zoom: Constant.defaultZoom)
+        self.view?.updateMap(location: location)
+        
+        fetchPlaces(location: location)
     }
 }
