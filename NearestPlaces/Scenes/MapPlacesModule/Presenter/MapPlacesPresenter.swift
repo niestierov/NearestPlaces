@@ -103,8 +103,6 @@ private extension DefaultMapPlacesPresenter {
         view?.update(with: dataResults)
         
         placesList = dataResults
-        
-        locationService.stopLocationUpdate()
     }
     
     func handleFailureRequest(with error: Error, location: CLLocationCoordinate2D) {
