@@ -18,7 +18,7 @@ final class DefaultPlacesListPresenter: PlacesListPresenter {
     
     private let router: Router
     private weak var view: PlacesListView?
-    private(set) var placesList: [Place] = []
+    private let placesList: [Place]
     
     //MARK: - Life Cycle -
     

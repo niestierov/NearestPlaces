@@ -16,6 +16,7 @@ protocol MapPlacesView: AnyObject {
         message: String,
         action: @escaping EmptyBlock
     )
+    func showRequestFailureAlert(message: String)
 }
 
 final class MapPlacesViewController: UIViewController {
@@ -41,6 +42,7 @@ final class MapPlacesViewController: UIViewController {
             static let defaultTryAgainActionTitle = "Try Again"
             static let defaultCancelTitle = "Cancel"
             static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
+            static let defaultFailureActionTitle = "Okay"
         }
     }
     
@@ -226,6 +228,20 @@ extension MapPlacesViewController: MapPlacesView {
             title: Constant.Alert.defaultTryAgainAlertTitle,
             message: message,
             actions: [cancelButton, tryAgainButton]
+        )
+    }
+    
+    func showRequestFailureAlert(message: String) {
+        let actionButton = AlertButtonAction(
+            title: Constant.Alert.defaultFailureActionTitle,
+            style: .default,
+            completion: nil
+        )
+        
+        showAlert(
+            title: Constant.Alert.defaultTryAgainAlertTitle,
+            message: message,
+            actions: [actionButton]
         )
     }
 }

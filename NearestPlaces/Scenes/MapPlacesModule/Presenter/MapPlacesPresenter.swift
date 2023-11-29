@@ -24,7 +24,7 @@ final class DefaultMapPlacesPresenter: MapPlacesPresenter {
     private let router: Router
     private let networkService: NetworkService
     private let locationService: LocationService
-    private(set) var placesList: [Place] = []
+    private var placesList: [Place] = []
     
     // MARK: - Life Cycle -
     
@@ -70,7 +70,7 @@ final class DefaultMapPlacesPresenter: MapPlacesPresenter {
             case .success(let data):
                 handleSuccessRequest(data: data)
             case .failure(let error):
-                handleFailureRequest(with: error, location: location)
+                self.view?.showRequestFailureAlert(message: error.localizedDescription)
             }
         }
     }
@@ -95,20 +95,10 @@ private extension DefaultMapPlacesPresenter {
     }
     
     func handleSuccessRequest(data: NearbySearchResponse?) {
-        guard let data,
-              let dataResults = data.places else {
-            return
-        }
+        let places = data?.places ?? []
+        placesList = places
         
-        view?.update(with: dataResults)
-        
-        placesList = dataResults
-    }
-    
-    func handleFailureRequest(with error: Error, location: CLLocationCoordinate2D) {
-        self.view?.showTryAgainAlert(message: error.localizedDescription) { [weak self] in
-            self?.fetchPlaces(location: location)
-        }
+        view?.update(with: places)
     }
 }
 
