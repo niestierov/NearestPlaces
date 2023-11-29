@@ -14,9 +14,6 @@ protocol MapPlacesPresenter {
 }
 
 final class DefaultMapPlacesPresenter: MapPlacesPresenter {
-    private enum Constant {
-        static let alertUnknownErrorMessage = "It seems like there's been an unknown error. You can try to download the data again."
-    }
     
     // MARK: - Properties -
     
@@ -68,9 +65,11 @@ final class DefaultMapPlacesPresenter: MapPlacesPresenter {
             
             switch response {
             case .success(let data):
-                handleSuccessRequest(data: data)
+                self.placesList = data?.places ?? []
+                self.view?.update(with: placesList)
+                
             case .failure(let error):
-                self.view?.showRequestFailureAlert(message: error.localizedDescription)
+                self.view?.showErrorAlert(message: error.localizedDescription)
             }
         }
     }
@@ -88,17 +87,10 @@ private extension DefaultMapPlacesPresenter {
             self?.view?.showAuthorizationDeniedAlert()
         }
         locationService.handleAuthorizationUnknown = { [weak self] in
-            self?.view?.showTryAgainAlert(message: Constant.alertUnknownErrorMessage) {
+            self?.view?.showTryAgainAlert {
                 self?.locationService.verifyLocationPermissions()
             }
         }
-    }
-    
-    func handleSuccessRequest(data: NearbySearchResponse?) {
-        let places = data?.places ?? []
-        placesList = places
-        
-        view?.update(with: places)
     }
 }
 

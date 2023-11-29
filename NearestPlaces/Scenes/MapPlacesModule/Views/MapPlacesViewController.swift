@@ -12,11 +12,8 @@ protocol MapPlacesView: AnyObject {
     func updateMap(location: CLLocationCoordinate2D)
     func update(with places: [Place])
     func showAuthorizationDeniedAlert()
-    func showTryAgainAlert(
-        message: String,
-        action: @escaping EmptyBlock
-    )
-    func showRequestFailureAlert(message: String)
+    func showTryAgainAlert(action: @escaping EmptyBlock)
+    func showErrorAlert(message: String)
 }
 
 final class MapPlacesViewController: UIViewController {
@@ -38,11 +35,12 @@ final class MapPlacesViewController: UIViewController {
             static let actionTitleSettings = "Open Settings"
             static let titleAuthorizationDenied = "Location Services Disabled"
             static let messageAuthorizationDenied = "You should enable location services in the settings for the program to work correctly."
-            static let defaultTryAgainAlertTitle = "Error"
             static let defaultTryAgainActionTitle = "Try Again"
             static let defaultCancelTitle = "Cancel"
             static let messageUnknownError = "It seems like there's been an unknown error. You can try to download the data again."
-            static let defaultFailureActionTitle = "Okay"
+            static let alertUnknownErrorMessage = "It seems like there's been an unknown error. You can try to download the data again."
+            static let defaultOkayActionTitle = "Okay"
+            static let defaultAlertErrorTitle = "Error"
         }
     }
     
@@ -209,10 +207,7 @@ extension MapPlacesViewController: MapPlacesView {
         )
     }
     
-    func showTryAgainAlert(
-        message: String,
-        action: @escaping EmptyBlock
-    ) {
+    func showTryAgainAlert(action: @escaping EmptyBlock) {
         let cancelButton = AlertButtonAction(
             title: Constant.Alert.defaultCancelTitle,
             style: .cancel,
@@ -225,23 +220,16 @@ extension MapPlacesViewController: MapPlacesView {
         )
         
         showAlert(
-            title: Constant.Alert.defaultTryAgainAlertTitle,
-            message: message,
+            title: Constant.Alert.defaultAlertErrorTitle,
+            message: Constant.Alert.alertUnknownErrorMessage,
             actions: [cancelButton, tryAgainButton]
         )
     }
     
-    func showRequestFailureAlert(message: String) {
-        let actionButton = AlertButtonAction(
-            title: Constant.Alert.defaultFailureActionTitle,
-            style: .default,
-            completion: nil
-        )
-        
+    func showErrorAlert(message: String) {
         showAlert(
-            title: Constant.Alert.defaultTryAgainAlertTitle,
-            message: message,
-            actions: [actionButton]
+            title: Constant.Alert.defaultAlertErrorTitle,
+            message: message
         )
     }
 }

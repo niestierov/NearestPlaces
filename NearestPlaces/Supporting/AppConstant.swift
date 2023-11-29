@@ -13,4 +13,12 @@ struct AlertButtonAction {
     let title: String
     let style: UIAlertAction.Style
     let completion: EmptyBlock?
+    
+    static func `default`() -> AlertButtonAction {
+        AlertButtonAction(
+            title: "Okay",
+            style: .default,
+            completion: nil
+        )
+    }
 }
