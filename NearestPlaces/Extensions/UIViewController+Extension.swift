@@ -11,7 +11,7 @@ extension UIViewController {
     func showAlert(
         title: String,
         message: String,
-        actions: [AlertButtonAction]
+        actions: [AlertButtonAction]? = nil
     ) {
         let alertController = UIAlertController(
             title: title,
@@ -19,7 +19,9 @@ extension UIViewController {
             preferredStyle: .alert
         )
         
-        actions.forEach { action in
+        let alertActions = actions ?? [AlertButtonAction.default()]
+        
+        alertActions.forEach { action in
             let alertAction = UIAlertAction(title: action.title, style: action.style) { _ in
                 action.completion?()
             }

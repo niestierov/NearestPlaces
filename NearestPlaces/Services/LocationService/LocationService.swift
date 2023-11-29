@@ -70,5 +70,7 @@ extension LocationService: CLLocationManagerDelegate {
         }
         
         delegate?.didUpdateLocation(location: location)
+        
+        locationManager.stopUpdatingLocation()
     }
 }

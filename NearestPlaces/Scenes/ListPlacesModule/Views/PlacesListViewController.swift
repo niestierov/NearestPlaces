@@ -7,11 +7,13 @@
 
 import UIKit
 
-final class PlacesListViewController: UIViewController {
+protocol PlacesListView: AnyObject { }
 
+final class PlacesListViewController: UIViewController {
+    
     // MARK: - Properties -
     
-    private var placesList: [Place] = []
+    private let presenter: PlacesListPresenter!
     
     // MARK: - UI Components -
     
@@ -32,16 +34,22 @@ final class PlacesListViewController: UIViewController {
         setupTableView()
     }
     
-    init(placesList: [Place]) {
-        self.placesList = placesList
+    init(presenter: PlacesListPresenter) {
+        self.presenter = presenter
         
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
 }
+
+// MARK: - PlacesListViewProtocol -
+
+extension PlacesListViewController: PlacesListView { }
+
+// MARK: - Private -
 
 private extension PlacesListViewController {
     func setupNavigationBar() {
@@ -64,12 +72,14 @@ private extension PlacesListViewController {
     }
 }
 
+// MARK: - UITableViewDataSource -
+
 extension PlacesListViewController: UITableViewDataSource {
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return placesList.count
+        return presenter.numberOfPlaces()
     }
     
     func tableView(
@@ -81,7 +91,9 @@ extension PlacesListViewController: UITableViewDataSource {
             at: indexPath
         )
         
-        cell.configure(place: placesList[indexPath.row])
+        let place = presenter.place(at: indexPath.row)
+        
+        cell.configure(place: place)
         
         return cell
     }

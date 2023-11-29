@@ -11,6 +11,7 @@
 		9A0869402B0BBB38009EA75F /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A08693F2B0BBB38009EA75F /* UIImageView+Extension.swift */; };
 		9A0A40B82B079FA600BF9832 /* StringIdentifiable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40B72B079FA600BF9832 /* StringIdentifiable+Extension.swift */; };
 		9A0A40BB2B07A08E00BF9832 /* UITableView + Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */; };
+		9A11F0A22B149B9A007F4013 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A11F0A12B149B9A007F4013 /* Router.swift */; };
 		9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */; };
 		9A2A7CBC2B0B8E680027CCF2 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A7CBB2B0B8E680027CCF2 /* UIView+Extension.swift */; };
 		9A2A7CBE2B0B9F990027CCF2 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A7CBD2B0B9F990027CCF2 /* Double+Extension.swift */; };
@@ -21,6 +22,8 @@
 		9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */; };
 		9A2D56B92AFCF315002A2A37 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56B82AFCF315002A2A37 /* Endpoint.swift */; };
 		9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */; };
+		9A4F344C2B109C1D0060AC96 /* PlacesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4F344B2B109C1D0060AC96 /* PlacesListPresenter.swift */; };
+		9A4F344E2B10A0770060AC96 /* MapPlacesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4F344D2B10A0770060AC96 /* MapPlacesPresenter.swift */; };
 		9A806D642B067DED00439893 /* PlacesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D602B067DED00439893 /* PlacesListViewController.swift */; };
 		9A806D652B067DED00439893 /* PlaceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A806D622B067DED00439893 /* PlaceListTableViewCell.swift */; };
 		9AE39FD62AF9114400B24002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE39FD52AF9114400B24002 /* AppDelegate.swift */; };
@@ -38,6 +41,7 @@
 		9A08693F2B0BBB38009EA75F /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		9A0A40B72B079FA600BF9832 /* StringIdentifiable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringIdentifiable+Extension.swift"; sourceTree = "<group>"; };
 		9A0A40BA2B07A08E00BF9832 /* UITableView + Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView + Reusable.swift"; sourceTree = "<group>"; };
+		9A11F0A12B149B9A007F4013 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		9A21CD0F2B03705900AA9F00 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		9A2A7CBB2B0B8E680027CCF2 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		9A2A7CBD2B0B9F990027CCF2 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
@@ -49,6 +53,8 @@
 		9A2D56B62AFCEFD2002A2A37 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		9A2D56B82AFCF315002A2A37 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		9A2D56BC2AFD3DB9002A2A37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		9A4F344B2B109C1D0060AC96 /* PlacesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListPresenter.swift; sourceTree = "<group>"; };
+		9A4F344D2B10A0770060AC96 /* MapPlacesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlacesPresenter.swift; sourceTree = "<group>"; };
 		9A806D602B067DED00439893 /* PlacesListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesListViewController.swift; sourceTree = "<group>"; };
 		9A806D622B067DED00439893 /* PlaceListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceListTableViewCell.swift; sourceTree = "<group>"; };
 		9AE39FD22AF9114400B24002 /* NearestPlaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearestPlaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +94,14 @@
 				6BA3C5FC8DB27D5F0CBBA5E2 /* Pods_NearestPlaces.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A11F0A02B149B83007F4013 /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				9A11F0A12B149B9A007F4013 /* Router.swift */,
+			);
+			path = Routing;
 			sourceTree = "<group>";
 		};
 		9A2A7CBF2B0B9FCE0027CCF2 /* ImageService */ = {
@@ -131,22 +145,23 @@
 			children = (
 				9A2D56A72AFCDD32002A2A37 /* Model */,
 				9A2D56A62AFCDD2F002A2A37 /* Views */,
-				9A2D56A52AFCDD2A002A2A37 /* Controllers */,
+				9A2D56A52AFCDD2A002A2A37 /* Presenter */,
 			);
 			path = MapPlacesModule;
 			sourceTree = "<group>";
 		};
-		9A2D56A52AFCDD2A002A2A37 /* Controllers */ = {
+		9A2D56A52AFCDD2A002A2A37 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */,
+				9A4F344D2B10A0770060AC96 /* MapPlacesPresenter.swift */,
 			);
-			path = Controllers;
+			path = Presenter;
 			sourceTree = "<group>";
 		};
 		9A2D56A62AFCDD2F002A2A37 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A2D56A82AFCDD8A002A2A37 /* MapPlacesViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,18 +202,17 @@
 			children = (
 				9A806D5E2B067DED00439893 /* Model */,
 				9A806D5F2B067DED00439893 /* Views */,
-				9A806D5C2B067DED00439893 /* Controller */,
+				9A806D5C2B067DED00439893 /* Presenter */,
 			);
 			path = ListPlacesModule;
 			sourceTree = "<group>";
 		};
-		9A806D5C2B067DED00439893 /* Controller */ = {
+		9A806D5C2B067DED00439893 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
-				9A806D602B067DED00439893 /* PlacesListViewController.swift */,
-				9A806D612B067DED00439893 /* Cell */,
+				9A4F344B2B109C1D0060AC96 /* PlacesListPresenter.swift */,
 			);
-			path = Controller;
+			path = Presenter;
 			sourceTree = "<group>";
 		};
 		9A806D5E2B067DED00439893 /* Model */ = {
@@ -211,6 +225,8 @@
 		9A806D5F2B067DED00439893 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A806D602B067DED00439893 /* PlacesListViewController.swift */,
+				9A806D612B067DED00439893 /* Cell */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -249,6 +265,7 @@
 				9A2D56A12AFCDCF5002A2A37 /* Scenes */,
 				9AFB96182B0E3F2A008BC6D1 /* Services */,
 				9A2D56B52AFCEFC7002A2A37 /* Network */,
+				9A11F0A02B149B83007F4013 /* Routing */,
 				9A2D56B02AFCE5AA002A2A37 /* Extensions */,
 				9A2D56A32AFCDCFE002A2A37 /* Supporting */,
 				9AE39FE32AF9114600B24002 /* Info.plist */,
@@ -414,10 +431,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A11F0A22B149B9A007F4013 /* Router.swift in Sources */,
 				9A2D56B22AFCE5C1002A2A37 /* AppConstant.swift in Sources */,
 				9A806D652B067DED00439893 /* PlaceListTableViewCell.swift in Sources */,
 				9A2A7CBC2B0B8E680027CCF2 /* UIView+Extension.swift in Sources */,
 				9A2D56B92AFCF315002A2A37 /* Endpoint.swift in Sources */,
+				9A4F344C2B109C1D0060AC96 /* PlacesListPresenter.swift in Sources */,
 				9A2D56A92AFCDD8A002A2A37 /* MapPlacesViewController.swift in Sources */,
 				9A2D56B42AFCECC3002A2A37 /* Place.swift in Sources */,
 				9AF4A22F2B027809006DB467 /* GoogleServicesConfigurator.swift in Sources */,
@@ -430,6 +449,7 @@
 				9AE39FD82AF9114400B24002 /* SceneDelegate.swift in Sources */,
 				9A806D642B067DED00439893 /* PlacesListViewController.swift in Sources */,
 				9A2D56BD2AFD3DB9002A2A37 /* UIViewController+Extension.swift in Sources */,
+				9A4F344E2B10A0770060AC96 /* MapPlacesPresenter.swift in Sources */,
 				9A0869402B0BBB38009EA75F /* UIImageView+Extension.swift in Sources */,
 				9A21CD102B03705900AA9F00 /* UIApplication+Extension.swift in Sources */,
 				9A2D56B72AFCEFD2002A2A37 /* NetworkService.swift in Sources */,
